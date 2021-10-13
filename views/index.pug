@@ -8,7 +8,7 @@ html
         .header
             p.logo.headertext= pagetitle
             .headerlinkbox
-                a(href="https://github.com/benas761/bad-schedule", class="headertext") [GitHub]
+                a(href="https://github.com/benas761/bad-schedule", class="headertext") GitHub
         #scheduleweek.scheduleweek
             p.weekdate#weekdate January 2022
             p#mon
@@ -18,4 +18,6 @@ html
             p#fri
             p#sat
             p#sun
+        p= dbdata
         script(src="/javascripts/schedule.js") 
+        

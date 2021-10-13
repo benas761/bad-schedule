@@ -1,0 +1,43 @@
+.logo {
+    float: left;
+}
+
+.headertext {
+    font-size: 1em;
+    margin: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.headerlinkbox {
+    float: right;
+    margin-bottom: 2px;
+}
+
+.header {
+    background-color: rgb(46, 26, 163);
+    margin: 0px;
+    overflow:hidden; /* to wrap floating links */
+}
+
+.scheduleweek {
+    background-color: grey;
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    grid-template-rows: repeat(86400, auto); /* one row is a minute of a day */
+}
+
+.weekdate {
+    grid-column: 1/8;
+}
+
+p {
+    margin: 0em;
+}
+
+body {
+    background-color: darkgray;
+    margin: 0em;
+}

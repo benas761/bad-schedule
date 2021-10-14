@@ -1,6 +1,13 @@
+// for getting the current month
+function write_month_year(){
+    var date = new Date()
+    var month = date.toLocaleString('default', { month: 'long' });
+    document.getElementById("weekdate").innerHTML = month + " " + date.getFullYear();
+}
+
+// for getting the current week
 function write_weekdays(){
     var weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    // for getting the current week
     let curr = new Date()
     let week = []
     for (let i = 1; i <= 7; i++) {
@@ -12,14 +19,10 @@ function write_weekdays(){
         document.getElementById(weekdays[i].toLowerCase()).innerHTML = week[i] + " " + weekdays[i];
     }
 }
-write_weekdays();
 
-function write_month_year(){
-    // for getting the current month
-    var date = new Date()
-    var month = date.toLocaleString('default', { month: 'long' });
-    document.getElementById("weekdate").innerHTML = month + " " + date.getFullYear();
-}
+write_weekdays();
+write_month_year();
+
 
 // To do:
 //  fill in the database

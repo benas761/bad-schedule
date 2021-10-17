@@ -22,15 +22,13 @@
     overflow:hidden; /* to wrap floating links */
 }
 
-.scheduleweek {
+.schedule {
     background-color: grey;
     display: grid;
-    grid-template-columns: repeat(7, auto);
+    grid-template-columns: repeat(8, auto);
     grid-template-rows: repeat(86400, auto); /* one row is a minute of a day. not */
-}
-
-.weekdate {
-    grid-column: 1/8;
+    margin: 3%;
+    margin-top: 2%;
 }
 
 p {

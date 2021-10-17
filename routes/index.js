@@ -14,10 +14,6 @@ router.get('/', function(req, res, next) {
     q = "SELECT * FROM Event WHERE schedule_id=1"
     con.query(q, function(err, rows) {
         if(err) throw err;
-        rows.forEach(row => {
-            delete row.schedule_id;
-            delete row.event_id;
-        });
         res.render('index', {
             pagetitle: 'Schedule', 
             dbdata: JSON.stringify(rows)

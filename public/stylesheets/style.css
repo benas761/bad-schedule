@@ -26,12 +26,17 @@
     background-color: grey;
     display: grid;
     grid-template-columns: repeat(8, auto);
-    grid-template-rows: repeat(86400, auto); /* one row is a minute of a day. not */
+    /* grid-template-rows are drawn in JavaScript */
+    grid-template-rows: repeat(24*12+2, 1fr);
     margin: 3%;
     margin-top: 2%;
 }
 
-.gridDiv {
+.eventDiv {
+
+}
+/* The eventDiv during input editing */
+.editedEventDiv{
 
 }
 
@@ -39,8 +44,14 @@
 
 }
 
+/* The "[edit]" */
 .eventButton {
     
+}
+
+/* inputs for editing the event */
+.eventInput {
+
 }
 
 p {

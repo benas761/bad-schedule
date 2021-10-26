@@ -4,6 +4,7 @@ html
         title= pagetitle
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(rel="stylesheet", href="/stylesheets/style.css")
+        script(src="/javascripts/events.js")
         script(src="/javascripts/schedule.js")
         script.
             //- To prevent XSS attacks b/c of user generated user, schedule and event names
@@ -13,7 +14,7 @@ html
             //-     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
             //- }
             window.onload = function(){
-                formSchedule(!{dbdata});
+                formSchedule();
             }
     body()
         .header
@@ -21,6 +22,5 @@ html
             .headerlinkbox
                 a(href="https://github.com/benas761/bad-schedule", class="headertext") GitHub
         #schedule.schedule
-            p a
         p= dbdata
         

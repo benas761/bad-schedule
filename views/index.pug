@@ -1,26 +1,23 @@
 doctype html
 html
     head
-        title= pagetitle
+        title= page_title
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(rel="stylesheet", href="/stylesheets/style.css")
         script(src="/javascripts/events.js")
         script(src="/javascripts/schedule.js")
         script.
-            //- To prevent XSS attacks b/c of user generated user, schedule and event names
-            //- function htmlDecode(input){
-            //-     var e = document.createElement('div');
-            //-     e.innerHTML = input;
-            //-     return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
-            //- }
             window.onload = function(){
                 formSchedule();
             }
     body()
         .header
-            p.logo.headertext= pagetitle
+            p.logo.headertext= page_title
             .headerlinkbox
                 a(href="https://github.com/benas761/bad-schedule", class="headertext") GitHub
+        #secondHeaderDiv.secondHeaderDiv
+            button#addEventBtn.addEventBtn(onclick="eventAddFormOnclick()") Add Event
+            //- h4.scheduleName= schedule_name
         #schedule.schedule
         p= dbdata
         

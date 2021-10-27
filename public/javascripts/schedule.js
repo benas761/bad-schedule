@@ -1,3 +1,5 @@
+//#region Weekday functions
+
 function findWeekdays(){
     let curr = new Date();
     let week = [];
@@ -31,24 +33,39 @@ function writeWeekdays(){
     }
 }
 
-function writeHours(startSeconds, endSeconds, timestampAmount){
-    // needs to always have spacing before the times
-    // needs to have a heavy bias to timestamp clean hours
+//#endregion Weekday functions
 
-    // set up a space before !
-    // if there's less than 4 hours on schedule, add a margin at the end !
-    // check clean hours and mark them
-    // profit
+//#region Time functions
 
-    // transform start/end seconds to five minute intervals
+function setTime(events, hourMargin = 2){
+    // calculate schedule time period
+    //  if time period comes out to four or less hours, make it have a 2 hours free before and after
+    let starts = [], ends = [], differences = [];
+    for(let i=0; i<events.length; i++){
+        let event = events[i];
+        starts.push(convertISOtimeToSeconds(event.start));
+        ends.push(convertISOtimeToSeconds(event.end));
+        differences.push(
+            convertISOtimeToSeconds(event.end) - convertISOtimeToSeconds(event.start)
+        );
+    }
+    let startSeconds = Math.min.apply(Math, starts);
+    let endSeconds   = Math.max.apply(Math, ends);
+    endSeconds += 3600;
+    // add 2 hours to start and end times if their period is short
+    if(Math.max(differences) <= 4 * 3600)
+        endSeconds += hourMargin * 3600;
+    if(startSeconds<1) startSeconds = 1;
+    if(endSeconds>24*60*60) endSeconds = 24*12; 
+    return([startSeconds, endSeconds]);
+}
 
+function writeHours(startSeconds, endSeconds){
     var startColumn = headerRowCount;
     var endColumn = Math.round((endSeconds-startSeconds)/60/5) + headerRowCount;
     var roundedSeconds = Math.round(startSeconds/60/5)*60*5;
-    var cleanColumnHour = (roundedSeconds/60/5) % 12;
-
-    console.log(cleanColumnHour);
-
+    // how many five minute intervals are needed to reach a clean hour
+    var cleanColumnHour = 12 - ((roundedSeconds/60/5) % 12);
     // draw the first time if it's not close to a clean time
     if(cleanColumnHour>3){
         let timestamp = document.createElement('p');
@@ -88,26 +105,13 @@ function convertSecondsToHHMM(seconds){
     return date.toISOString().substr(11, 5);
 }
 
-function drawSchedule(startSeconds, endSeconds, timestampAmount = 8){
-    let fiveMinuteDifference = (endSeconds-startSeconds) / 60 / 5;
-    let schedule = document.getElementById("schedule");
-    // sets the amount of rows into intervals of 5 minutes
-    let rowAttribute = firstRowHeight+'px ';
-    rowAttribute += marginRowHeight+'px '; // margin before times
-    rowAttribute += 'repeat('+fiveMinuteDifference+', 1fr)';
-    schedule.style.gridTemplateRows = rowAttribute;
-    // schedule.setAttribute('style', "grid-template-rows: "+rowAttribute);
-    // sets grid height according to the heights specified on top
-    schedule.style.height = (fiveMinuteDifference*timeRowHeight + firstRowHeight)+'px';
-    
-    writeWeekdays();
-    writeHours(startSeconds, endSeconds, timestampAmount);
-}
+//#endregion Time functions
 
+//#region Drawing schedule
 
 async function formSchedule(){
     // pauses all JS until it gets a response from the database. Fine at first load, but shouldn't be used for other events
-    let dbJsonList = await getEvents();
+    let dbJsonList = await postData({}, '/eventSelect');
     dbJsonList = JSON.parse(dbJsonList);
     let seconds = setTime(dbJsonList, 2);
     let startSeconds = seconds[0], endSeconds = seconds[1];
@@ -117,11 +121,30 @@ async function formSchedule(){
     eventClassList.forEach(eventClass => { eventClass.draw(); });
 }
 
+function drawSchedule(startSeconds, endSeconds){
+    let fiveMinuteDifference = Math.round((endSeconds-startSeconds) / 60 / 5);
+    let schedule = document.getElementById("schedule");
+    // sets the amount of rows into intervals of 5 minutes
+    let rowAttribute = firstRowHeight+'px ';
+    rowAttribute += marginRowHeight+'px '; // margin before times
+    let scheduleHeight = document.getElementById("schedule").style.height;
+    rowAttribute += 'repeat('+fiveMinuteDifference+', '+timeRowHeight+'px)';
+    // schedule.style.gridTemplateRows = rowAttribute;
+    schedule.setAttribute('style', 'grid-template-rows: '+rowAttribute);
+    // sets grid height according to the heights specified on top
+    // schedule.style.height = (fiveMinuteDifference*timeRowHeight + firstRowHeight)+'px';
+    
+    writeWeekdays();
+    writeHours(startSeconds, endSeconds);
+}
+
+//#endregion Drawing schedule
+
 // To do:
-// add event button
+// add event button !
 // cancel edit button
-// fix time
-// check user input in: edit onclick listener
+// fix time !
+// check user input in: edit/add onclick listener
 // css stylesheet
 
 // tech used - pug, expressJS (node.js)

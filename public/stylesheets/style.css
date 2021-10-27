@@ -22,30 +22,69 @@
     overflow:hidden; /* to wrap floating links */
 }
 
-.schedule {
-    background-color: grey;
+.secondHeaderDiv {
+    margin-left: 5%;
+    margin-right: 5%;
     display: grid;
-    grid-template-columns: repeat(8, auto);
+    grid-template-columns: 120px auto;
+    grid-template-rows: auto;
+}
+
+.addEventBtn {
+    border-radius: 5px;
+    width: fit-content;
+    height: 25px;
+    margin: 10px;
+}
+
+.scheduleName {
+    margin-top: auto;
+    margin-bottom: auto;
+
+}
+
+.schedule {
+    background-color: seashell;
+    display: grid;
+    grid-template-columns: repeat(7, auto);
     /* grid-template-rows are drawn in JavaScript */
-    grid-template-rows: repeat(24*12+2, 1fr);
-    margin: 3%;
-    margin-top: 2%;
+    margin-left: 3%;
+    margin-right: 3%;
+    height: 90%;
 }
 
 .eventDiv {
-
+    border: solid;
+    border-width: 2px;
+    border-radius: 2px;
+    margin: 2px;
+    background-color: gainsboro;
+    overflow: hidden auto;
 }
 /* The eventDiv during input editing */
 .editedEventDiv{
-
+    border: solid;
+    border-width: 2px;
+    border-radius: 2px;
+    margin-left: 3px;
+    margin-right: 3px;
+    background-color: gainsboro;
 }
 
 .eventText {
-
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 3px;
 }
 
 /* The "[edit]" */
 .eventButton {
+    float: right;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 3px;
+    border: none;
+    background-color: rgba(200, 200, 200, 0.4);
     
 }
 
@@ -55,10 +94,9 @@
 }
 
 p {
-    margin: 0em;
+    margin: 0px;
 }
 
 body {
-    background-color: darkgray;
-    margin: 0em;
+    margin: 0px;
 }

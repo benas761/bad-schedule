@@ -35,7 +35,7 @@ class Event {
         this.eventEdit.innerHTML = "edit";
         this.eventEdit.className = "eventButton";
         this.eventEdit.setAttribute('onclick', 
-            "editEvent('"+this.fullId+"')");
+            "eventEditOnclick('"+this.fullId+"')");
         
         this.eventDiv.appendChild(this.eventName);
         this.eventDiv.appendChild(this.eventTime);
@@ -53,115 +53,161 @@ class Event {
         this.editing = true;
         // remove all children
         this.clear();
-        // append inputs with children's values
+        // append inputs with childrens' values
         // for simplicity, inputs are not saved inside the class
         let form = document.createElement('form');
-        let eventNameInput = document.createElement("input");
-        let eventTime0Input = document.createElement("input");
-        let eventTimeDash = document.createElement("p");
-        let eventTime1Input = document.createElement("input");
-        let eventPeriodInput = document.createElement("input");
-        let eventDayInput = document.createElement("input");
-        let eventSaveButton = document.createElement("button");
-        let eventNamePar = document.createElement("p");
-        let eventTimePar = document.createElement("p");
-        let eventDayPar = document.createElement("p");
-        let eventPeriodPar = document.createElement("p");
 
-        eventNameInput.value = this.eventJson.event_name;
-        eventTime0Input.value = this.eventJson.start.substr(0, 5);
-        eventTime1Input.value = this.eventJson.end.substr(0, 5);
-        eventPeriodInput.value = this.eventJson.period;
-        eventDayInput.value = this.eventJson.start_day.split('T')[0]; // show only the date format
+        // need to add a day b/c it changes to a day before
+        let startDayDate = new Date(this.eventJson.start_day);
+        startDayDate.setDate(startDayDate.getDate() + 1);
+        let startDayString = startDayDate.toISOString().split('T')[0];
 
-        eventNamePar.innerHTML = 'Name:';
-        eventTimePar.innerHTML = 'Time';
-        eventTimeDash.innerHTML = ' - ';
-        eventPeriodPar.innerHTML = 'Period in days';
-        eventSaveButton.innerHTML = 'save';
-        eventDayPar.innerHTML = 'Earliest event date';
-
+        createEventForm(form, this.eventJson.event_name, this.eventJson.start.substr(0, 5), 
+            this.eventJson.end.substr(0, 5), this.eventJson.period, startDayString);
         this.eventDiv.className = "editedEventDiv";
-        eventNameInput.className = "eventInput";
-        eventTime0Input.className = "eventInput";
-        eventTime1Input.className = "eventInput";
-        eventPeriodInput.className = "eventInput";
-        eventNamePar.className = "eventText";
-        eventTimePar.classname = "eventText";
-        eventPeriodPar.className = "eventText";
-        eventTimeDash.className = "eventText";
-        eventSaveButton.type = 'submit';
 
-        form.appendChild(eventNamePar);
-        form.appendChild(eventNameInput);
-        form.appendChild(eventTimePar);
-        form.appendChild(eventTime0Input);
-        form.appendChild(eventTimeDash);
-        form.appendChild(eventTime1Input);
-        form.appendChild(eventDayPar);
-        form.appendChild(eventDayInput);
-        form.appendChild(eventPeriodPar);
-        form.appendChild(eventPeriodInput);
-        form.appendChild(eventSaveButton);
         this.eventDiv.appendChild(form);
-
-        form.addEventListener('submit', async (formEvent) => {
-            formEvent.preventDefault();
-            let schedule = document.getElementById("schedule");
-            // make sure of the format later
-            let dbUpdateJson = {
-                event_id: this.eventJson.event_id,
-                event_name: form.elements[0].value,
-                start: form.elements[1].value,
-                end: form.elements[2].value,
-                start_day: form.elements[3].value,
-                period: form.elements[4].value
-            };
-            postData(dbUpdateJson, '/eventUpdate');
-            // let dbJsonList = await getEvents();
-            // dbJsonList = JSON.parse(dbJsonList);
-            // need to delete and redo the whole schedule
-            while(schedule.firstChild)
-                schedule.removeChild(schedule.lastChild);
-            //clearEvents(); // cleared with all children
-            // let seconds = setTime(dbJsonList)[0];
-            // let startSeconds = seconds[0], endSeconds = seconds[0];
-            // drawSchedule(startSeconds, endSeconds, 8);
-            formSchedule();
-
-            // refreshEvents(dbJsonList, startSeconds);
-            // eventClassList.forEach(eventClass => { eventClass.draw(); });
-        })
+        
+        var eventId = this.eventJson.event_id;
+        form.addEventListener('submit', function(formEvent) { 
+            submitEventEdit(formEvent, form, eventId);
+        });
     }
 }
 
-async function getEvents(){
-    let header = "/eventSelect";
-    let res = await postData({}, header);
-    return res;
+//#region editing and adding events
+
+// for Event.edit() event listener
+async function submitEventEdit(formEvent, form, eventId){
+    formEvent.preventDefault();
+
+    // make sure of the format later
+    let dbUpdateJson = {
+        event_id: eventId,
+        event_name: form.elements[0].value,
+        start: form.elements[1].value,
+        end: form.elements[2].value,
+        start_day: form.elements[3].value,
+        period: form.elements[4].value
+    };
+    postData(dbUpdateJson, '/eventUpdate');
+    let schedule = document.getElementById("schedule");
+    while(schedule.firstChild)
+        schedule.removeChild(schedule.lastChild);
+    formSchedule();
 }
 
-function setTime(events, hourMargin = 2){
-    // calculate schedule time period
-    //  if time period comes out to four or less hours, make it have a 2 hours free before and after
-    let starts = [], ends = [], differences = [];
-    for(let i=0; i<events.length; i++){
-        let event = events[i];
-        starts.push(convertISOtimeToSeconds(event.start));
-        ends.push(convertISOtimeToSeconds(event.end));
-        differences.push(
-            convertISOtimeToSeconds(event.end) - convertISOtimeToSeconds(event.start)
-        );
-    }
-    let startSeconds = Math.min.apply(Math, starts);
-    let endSeconds   = Math.max.apply(Math, ends);
-    // add 2 hours to start and end times if their period is short
-    if(Math.max(differences) <= 4 * 3600)
-        endSeconds += hourMargin * 3600;
-    if(startSeconds<1) startSeconds = 1;
-    if(endSeconds>24*60*60) endSeconds = 24*12; 
-    return([startSeconds, endSeconds]);
+function eventEditOnclick(eventFullId){
+    eventClassList.forEach(eventClass => {
+        if(eventClass.fullId == eventFullId){
+            eventClass.edit();
+            return;
+        }
+    });
 }
+
+function eventAddFormOnclick() {
+    let headerDiv = document.getElementById("secondHeaderDiv"); 
+    // append inputs with childrens' values
+    // for simplicity, inputs are not saved inside the class
+    let form = document.createElement('form');
+    
+    // need to add a day b/c it changes to a day before
+    let today = new Date().toISOString().split('T')[0];
+    createEventForm(form, '', '', '', '', today);
+    let secondHeaderDiv = document.getElementById("secondHeaderDiv");
+    secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
+
+    headerDiv.appendChild(form);
+    
+    form.addEventListener('submit', function(formEvent) { 
+        submitEventCreation(formEvent, form);
+    });
+}
+
+function createEventForm(form, event_name='', start='', end='', period='', day=''){
+    let eventNameInput = document.createElement("input");
+    let eventTime0Input = document.createElement("input");
+    let eventTimeDash = document.createElement("p");
+    let eventTime1Input = document.createElement("input");
+    let eventPeriodInput = document.createElement("input");
+    let eventDayInput = document.createElement("input");
+    let eventSaveButton = document.createElement("button");
+    let eventNamePar = document.createElement("p");
+    let eventTimePar = document.createElement("p");
+    let eventDayPar = document.createElement("p");
+    let eventPeriodPar = document.createElement("p");
+
+    eventNameInput.value = event_name;
+    eventTime0Input.value = start;
+    eventTime1Input.value = end;
+    eventPeriodInput.value = period;
+    eventDayInput.value = day;
+
+    eventNamePar.innerHTML = 'Name:';
+    eventTimePar.innerHTML = 'Time';
+    eventTimeDash.innerHTML = ' - ';
+    eventPeriodPar.innerHTML = 'Period in days';
+    eventSaveButton.innerHTML = 'save';
+    eventDayPar.innerHTML = 'Earliest event date';
+
+    eventNameInput.className = "eventInput";
+    eventTime0Input.className = "eventInput";
+    eventTime1Input.className = "eventInput";
+    eventPeriodInput.className = "eventInput";
+    eventNamePar.className = "eventText";
+    eventTimePar.classname = "eventText";
+    eventPeriodPar.className = "eventText";
+    eventTimeDash.className = "eventText";
+    eventSaveButton.type = 'submit';
+
+    form.appendChild(eventNamePar);
+    form.appendChild(eventNameInput);
+    form.appendChild(eventTimePar);
+    form.appendChild(eventTime0Input);
+    form.appendChild(eventTimeDash);
+    form.appendChild(eventTime1Input);
+    form.appendChild(eventDayPar);
+    form.appendChild(eventDayInput);
+    form.appendChild(eventPeriodPar);
+    form.appendChild(eventPeriodInput);
+    form.appendChild(eventSaveButton);
+
+    return form;
+}
+
+function submitEventCreation(formEvent, form, schedule_id= 1) {
+    formEvent.preventDefault();
+
+    // make sure of the format later
+    let dbUpdateJson = {
+        schedule_id: schedule_id,
+        event_name: form.elements[0].value,
+        start: form.elements[1].value,
+        end: form.elements[2].value,
+        start_day: form.elements[3].value,
+        period: form.elements[4].value
+    };
+    postData(dbUpdateJson, '/eventInsert');
+
+    let schedule = document.getElementById("schedule");
+    while(schedule.firstChild)
+        schedule.removeChild(schedule.lastChild);
+    formSchedule();
+
+    let secondHeaderDiv = document.getElementById("secondHeaderDiv");
+    while(secondHeaderDiv.firstChild)
+        secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
+    // add the event button. Will need to be put in a seperate function after adding other buttons
+    let addEventButton = document.createElement('button');
+    addEventButton.innerHTML = "Add Event";
+    addEventButton.onclick = eventAddFormOnclick();
+    secondHeaderDiv.appendChild(addEventButton);
+}
+
+//#endregion for editing and adding events
+
+//#region drawing events to schedule
 
 function findEventColumns(event){
     let week = findWeekdays()
@@ -181,15 +227,6 @@ function findEventColumns(event){
         }
     }
     return gridColumns;
-}
-
-function editEvent(eventFullId){
-    eventClassList.forEach(eventClass => {
-        if(eventClass.fullId == eventFullId){
-            eventClass.edit();
-            return;
-        }
-    });
 }
 
 function clearEvents() {
@@ -212,14 +249,7 @@ function refreshEvents(dbJsonList, startSeconds){
     });
 }
 
-function editEvent(eventFullId){
-    eventClassList.forEach(eventClass => {
-        if(eventClass.fullId == eventFullId) {
-            eventClass.edit();
-            return;
-        }
-    });
-}
+//#endregion drawing events to schedule
 
 // data is a json, header is for index.js orientation
 // returns a promise

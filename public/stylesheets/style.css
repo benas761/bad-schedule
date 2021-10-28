@@ -17,31 +17,62 @@
 }
 
 .header {
-    background-color: rgb(46, 26, 163);
+    background-color: rgb(78, 124, 151);
     margin: 0px;
     overflow:hidden; /* to wrap floating links */
 }
 
 .secondHeaderDiv {
-    margin-left: 5%;
-    margin-right: 5%;
-    display: grid;
+    background-color: seashell;
+    margin-left: 3%;
+    margin-right: 3%;
+    /* margin-bottom: 10px; */
+    margin-top: 10px;
+    /* display: grid;
     grid-template-columns: 120px auto;
-    grid-template-rows: auto;
+    grid-template-rows: auto; */
+    border: solid;
+    border-width: thin;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 70px;
+}
+
+.eventAddForm {
+    display: grid;
+    grid-template-columns: repeat(6, auto);
+    grid-template-rows: auto, auto;
+    grid-gap: 5px;
+    margin: auto;
+}
+
+/* inputs for adding or editing the event */
+.eventInput {
+    background-color: transparent;
+    /* border-color: transparent; */
+    border-top: transparent;
+    border-right: transparent;
+    border-left: transparent;
+    border-bottom-left-radius: 5px;
+    border-width: 3px;
+    border-bottom-color: rgba(78, 124, 151, 0.5);
+}
+
+.eventInput:focus {
+    outline: none;
 }
 
 .addEventBtn {
     border-radius: 5px;
     width: fit-content;
     height: 25px;
-    margin: 10px;
+    margin: auto;
 }
 
-.scheduleName {
+/* .scheduleName {
     margin-top: auto;
     margin-bottom: auto;
-
-}
+} */
 
 .schedule {
     background-color: seashell;
@@ -51,6 +82,43 @@
     margin-left: 3%;
     margin-right: 3%;
     height: 90%;
+    border: solid;
+    border-width: thin;
+    border-top: unset;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.columnDivider {
+    border-right: dashed;
+    border-width: thin;
+    border-color: gray;
+}
+.firstColumnDivider {
+    border-right: solid;
+    border-width: thin;
+    border-color: black;
+}
+
+.rowDivider {
+    border-top: dashed;
+    border-width: thin;
+    border-color: gray;
+}
+.firstRowDivider {
+    border-top: solid;
+    border-width: thin;
+    border-color: black;
+}
+
+.weekdays {
+    margin: auto;
+}
+
+.scheduleTime {
+    margin-left: 5px;
+    margin-right: 5px;
+    grid-column: 1/2;
 }
 
 .eventDiv {
@@ -58,6 +126,7 @@
     border-width: 2px;
     border-radius: 2px;
     margin: 2px;
+    margin-right: 3px;
     background-color: gainsboro;
     overflow: hidden auto;
 }
@@ -69,6 +138,7 @@
     margin-left: 3px;
     margin-right: 3px;
     background-color: gainsboro;
+    overflow: hidden auto;
 }
 
 .eventText {
@@ -77,21 +147,18 @@
     margin-top: 3px;
 }
 
-/* The "[edit]" */
-.eventButton {
+.formBtn {
     float: right;
     margin-right: 5px;
     margin-left: 5px;
     margin-top: 3px;
     border: none;
-    background-color: rgba(200, 200, 200, 0.4);
-    
+    background-color: rgba(122, 113, 201, 0.4);
 }
 
-/* inputs for editing the event */
-.eventInput {
+/* .addEventInput {} */
 
-}
+/* .editEventInput {} */
 
 p {
     margin: 0px;

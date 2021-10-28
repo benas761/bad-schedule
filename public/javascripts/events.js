@@ -33,13 +33,13 @@ class Event {
         this.eventTime.innerHTML =  this.eventJson.start.substr(0, 5) + ' - ' + this.eventJson.end.substr(0, 5);
         this.eventEdit.id = "eventEdit"+this.fullId;
         this.eventEdit.innerHTML = "edit";
-        this.eventEdit.className = "eventButton";
-        this.eventEdit.setAttribute('onclick', 
+        this.eventEdit.className = "formBtn";
+        /*this.eventEdit.setAttribute('onclick', 
             "eventEditOnclick('"+this.fullId+"')");
         
+        this.eventDiv.appendChild(this.eventEdit);*/
         this.eventDiv.appendChild(this.eventName);
         this.eventDiv.appendChild(this.eventTime);
-        this.eventDiv.appendChild(this.eventEdit);
     }
     draw(){
         let schedule = document.getElementById('schedule');
@@ -49,83 +49,40 @@ class Event {
         while(this.eventDiv.firstChild)
             this.eventDiv.removeChild(this.eventDiv.lastChild);
     }
-    edit(){
-        this.editing = true;
-        // remove all children
-        this.clear();
-        // append inputs with childrens' values
-        // for simplicity, inputs are not saved inside the class
-        let form = document.createElement('form');
-
-        // need to add a day b/c it changes to a day before
-        let startDayDate = new Date(this.eventJson.start_day);
-        startDayDate.setDate(startDayDate.getDate() + 1);
-        let startDayString = startDayDate.toISOString().split('T')[0];
-
-        createEventForm(form, this.eventJson.event_name, this.eventJson.start.substr(0, 5), 
-            this.eventJson.end.substr(0, 5), this.eventJson.period, startDayString);
-        this.eventDiv.className = "editedEventDiv";
-
-        this.eventDiv.appendChild(form);
-        
-        var eventId = this.eventJson.event_id;
-        form.addEventListener('submit', function(formEvent) { 
-            submitEventEdit(formEvent, form, eventId);
-        });
-    }
 }
 
 //#region editing and adding events
 
-// for Event.edit() event listener
-async function submitEventEdit(formEvent, form, eventId){
-    formEvent.preventDefault();
-
-    // make sure of the format later
-    let dbUpdateJson = {
-        event_id: eventId,
-        event_name: form.elements[0].value,
-        start: form.elements[1].value,
-        end: form.elements[2].value,
-        start_day: form.elements[3].value,
-        period: form.elements[4].value
-    };
-    postData(dbUpdateJson, '/eventUpdate');
-    let schedule = document.getElementById("schedule");
-    while(schedule.firstChild)
-        schedule.removeChild(schedule.lastChild);
-    formSchedule();
-}
-
-function eventEditOnclick(eventFullId){
-    eventClassList.forEach(eventClass => {
-        if(eventClass.fullId == eventFullId){
-            eventClass.edit();
-            return;
-        }
-    });
-}
-
 function eventAddFormOnclick() {
-    let headerDiv = document.getElementById("secondHeaderDiv"); 
-    // append inputs with childrens' values
-    // for simplicity, inputs are not saved inside the class
     let form = document.createElement('form');
     
-    // need to add a day b/c it changes to a day before
     let today = new Date().toISOString().split('T')[0];
-    createEventForm(form, '', '', '', '', today);
+    let cancelBtn = createEventForm(form, "addEventInput", '', '', '', '', today);
+    cancelBtn.onclick = cancelAddForm;
+    form.className = "eventAddForm";
     let secondHeaderDiv = document.getElementById("secondHeaderDiv");
     secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
 
-    headerDiv.appendChild(form);
+    secondHeaderDiv.appendChild(form);
     
     form.addEventListener('submit', function(formEvent) { 
         submitEventCreation(formEvent, form);
     });
 }
 
-function createEventForm(form, event_name='', start='', end='', period='', day=''){
+function cancelAddForm() {
+    let secondHeaderDiv = document.getElementById("secondHeaderDiv");
+    while(secondHeaderDiv.firstChild)
+        secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
+    // add the event button. Will need to be put in a seperate function after adding other buttons
+    let addEventButton = document.createElement('button');
+    addEventButton.innerHTML = "Add Event";
+    addEventButton.onclick = eventAddFormOnclick;
+    addEventButton.className = "addEventBtn";
+    secondHeaderDiv.appendChild(addEventButton);
+}
+
+function createEventForm(form, input_class, event_name='', start='', end='', period='', day='', ){
     let eventNameInput = document.createElement("input");
     let eventTime0Input = document.createElement("input");
     let eventTimeDash = document.createElement("p");
@@ -133,6 +90,7 @@ function createEventForm(form, event_name='', start='', end='', period='', day='
     let eventPeriodInput = document.createElement("input");
     let eventDayInput = document.createElement("input");
     let eventSaveButton = document.createElement("button");
+    let eventCancelButton = document.createElement("button");
     let eventNamePar = document.createElement("p");
     let eventTimePar = document.createElement("p");
     let eventDayPar = document.createElement("p");
@@ -144,36 +102,44 @@ function createEventForm(form, event_name='', start='', end='', period='', day='
     eventPeriodInput.value = period;
     eventDayInput.value = day;
 
-    eventNamePar.innerHTML = 'Name:';
-    eventTimePar.innerHTML = 'Time';
-    eventTimeDash.innerHTML = ' - ';
+    eventNamePar.innerHTML = 'Name';
+    eventTimePar.innerHTML = 'Start time';
+    eventTimeDash.innerHTML = 'End time';
     eventPeriodPar.innerHTML = 'Period in days';
     eventSaveButton.innerHTML = 'save';
+    eventCancelButton.innerHTML = 'cancel';
     eventDayPar.innerHTML = 'Earliest event date';
 
-    eventNameInput.className = "eventInput";
-    eventTime0Input.className = "eventInput";
-    eventTime1Input.className = "eventInput";
-    eventPeriodInput.className = "eventInput";
+    eventNameInput.classList.add("eventInput", input_class);
+    eventTime0Input.classList.add("eventInput", input_class);
+    eventTime1Input.classList.add("eventInput", input_class);
+    eventPeriodInput.classList.add("eventInput", input_class);
+    eventDayInput.classList.add("eventInput", input_class);
     eventNamePar.className = "eventText";
     eventTimePar.classname = "eventText";
     eventPeriodPar.className = "eventText";
     eventTimeDash.className = "eventText";
+    eventDayPar.className = "eventText";
+    eventCancelButton.className = "formBtn";
+    eventSaveButton.className = "formBtn";
+    
     eventSaveButton.type = 'submit';
 
     form.appendChild(eventNamePar);
-    form.appendChild(eventNameInput);
     form.appendChild(eventTimePar);
-    form.appendChild(eventTime0Input);
     form.appendChild(eventTimeDash);
-    form.appendChild(eventTime1Input);
     form.appendChild(eventDayPar);
-    form.appendChild(eventDayInput);
     form.appendChild(eventPeriodPar);
+    form.appendChild(eventCancelButton)
+
+    form.appendChild(eventNameInput);
+    form.appendChild(eventTime0Input);
+    form.appendChild(eventTime1Input);
+    form.appendChild(eventDayInput);
     form.appendChild(eventPeriodInput);
     form.appendChild(eventSaveButton);
 
-    return form;
+    return eventCancelButton;
 }
 
 function submitEventCreation(formEvent, form, schedule_id= 1) {
@@ -182,11 +148,11 @@ function submitEventCreation(formEvent, form, schedule_id= 1) {
     // make sure of the format later
     let dbUpdateJson = {
         schedule_id: schedule_id,
-        event_name: form.elements[0].value,
-        start: form.elements[1].value,
-        end: form.elements[2].value,
-        start_day: form.elements[3].value,
-        period: form.elements[4].value
+        event_name: form.elements[1].value,
+        start: form.elements[2].value,
+        end: form.elements[3].value,
+        start_day: form.elements[4].value,
+        period: form.elements[5].value
     };
     postData(dbUpdateJson, '/eventInsert');
 
@@ -201,7 +167,8 @@ function submitEventCreation(formEvent, form, schedule_id= 1) {
     // add the event button. Will need to be put in a seperate function after adding other buttons
     let addEventButton = document.createElement('button');
     addEventButton.innerHTML = "Add Event";
-    addEventButton.onclick = eventAddFormOnclick();
+    addEventButton.onclick = eventAddFormOnclick;
+    addEventButton.className = "addEventBtn";
     secondHeaderDiv.appendChild(addEventButton);
 }
 
@@ -212,12 +179,16 @@ function submitEventCreation(formEvent, form, schedule_id= 1) {
 function findEventColumns(event){
     let week = findWeekdays()
     for(let i=0; i<7; i++){
-        week[i] = new Date(week[i]);
+        // console.log(week[1]);
         // set times to 0 b/c we're comparing dates
         week[i].setHours(0, 0, 0, 0);
     }
     let eventDay = new Date(event.start_day);
     eventDay.setHours(0, 0, 0, 0);
+    // console.log(event.start_day);
+    // console.log(eventDay);
+    // console.log(week[1]);
+    // timezones be damned... add a day to
 
     let gridColumns = [];
     for(let iterDay=eventDay; iterDay <= week[week.length-1]; iterDay.setDate(iterDay.getDate() + event.period)){

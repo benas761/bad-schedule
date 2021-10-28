@@ -4,7 +4,6 @@ var mysql = require('mysql');
 var router = express.Router();
 var con = require('./db.js')
 var app = require('../app');
-const { route } = require('../app');
 
 router.get('/', function(req, res) {
     // var sql = "CREATE TABLE User(user_id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL)";
@@ -54,9 +53,11 @@ router.post('/eventUpdate', function (req, res){
         }
     });
 });
-
+//[{"event_id":1,"schedule_id":1,"event_name":"test","start":"18:00:00","end":"19:00:00",
+//"start_day":"2021-10-15T21:00:00.000Z","period":1},{"event_id":2,"schedule_id":1,
+//"event_name":"test1","start":"14:07:00","end":"17:00:00","start_day":"2021-10-24T21:00:00.000Z","period":2}]
 router.post('/eventSelect', function (req, res){
-    q = "SELECT * FROM Event WHERE schedule_id=1";
+    q = "SELECT event_id, schedule_id, event_name, start, end, DATE_FORMAT(start_day, '%Y-%m-%d') as start_day, period  FROM Event WHERE schedule_id=1";
     con.query(q, function(err, rows) {
         if(err) throw err;
         else {

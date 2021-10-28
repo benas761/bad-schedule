@@ -3,7 +3,6 @@ var marginRowHeight = 20;
 var headerRowCount = 3;
 var timeRowHeight = 8;
 var eventClassList = [];
-var eventList = [];
 
 class Event {
     // draw the event on schedule and save its ids
@@ -14,7 +13,7 @@ class Event {
         this.eventName = document.createElement('p');
         this.eventTime = document.createElement('p');
         this.eventEdit = document.createElement('button');
-        this.editing = false;
+        this.eventDelete = document.createElement('button');
         
         var eventGridStart = Math.round(
             (convertISOtimeToSeconds(this.eventJson.start)-startSeconds)/60/5)+headerRowCount;
@@ -33,13 +32,20 @@ class Event {
         this.eventTime.innerHTML =  this.eventJson.start.substr(0, 5) + ' - ' + this.eventJson.end.substr(0, 5);
         this.eventEdit.id = "eventEdit"+this.fullId;
         this.eventEdit.innerHTML = "edit";
-        this.eventEdit.className = "formBtn";
-        /*this.eventEdit.setAttribute('onclick', 
+        this.eventEdit.classList.add("eventBtn", "eventEditBtn")
+        this.eventEdit.className = "eventBtn";
+        this.eventEdit.setAttribute('onclick', 
             "eventEditOnclick('"+this.fullId+"')");
+        this.eventDelete.id = "eventDelete"+this.fullId;
+        this.eventDelete.innerHTML = "delete";
+        this.eventDelete.classList.add("eventBtn", "eventDeleteBtn")
+        this.eventDelete.setAttribute('onclick', 
+            "eventDeleteOnclick('"+this.fullId+"')");
         
-        this.eventDiv.appendChild(this.eventEdit);*/
         this.eventDiv.appendChild(this.eventName);
         this.eventDiv.appendChild(this.eventTime);
+        this.eventDiv.appendChild(this.eventEdit);
+        this.eventDiv.appendChild(this.eventDelete);
     }
     draw(){
         let schedule = document.getElementById('schedule');
@@ -57,8 +63,8 @@ function eventAddFormOnclick() {
     let form = document.createElement('form');
     
     let today = new Date().toISOString().split('T')[0];
-    let cancelBtn = createEventForm(form, "addEventInput", '', '', '', '', today);
-    cancelBtn.onclick = cancelAddForm;
+    let cancelBtn = createEventForm(form, "addEventInput", '', '', '', '7', today);
+    cancelBtn.onclick = drawOriginalHeader;
     form.className = "eventAddForm";
     let secondHeaderDiv = document.getElementById("secondHeaderDiv");
     secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
@@ -70,7 +76,7 @@ function eventAddFormOnclick() {
     });
 }
 
-function cancelAddForm() {
+function drawOriginalHeader(){
     let secondHeaderDiv = document.getElementById("secondHeaderDiv");
     while(secondHeaderDiv.firstChild)
         secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
@@ -81,8 +87,8 @@ function cancelAddForm() {
     addEventButton.className = "addEventBtn";
     secondHeaderDiv.appendChild(addEventButton);
 }
-
-function createEventForm(form, input_class, event_name='', start='', end='', period='', day='', ){
+// since inputs don't have ids, this returns the cancel button for the onclick cancel function assignment
+function createEventForm(form, input_class, event_name='', start='', end='', period='', day=''){
     let eventNameInput = document.createElement("input");
     let eventTime0Input = document.createElement("input");
     let eventTimeDash = document.createElement("p");
@@ -145,8 +151,7 @@ function createEventForm(form, input_class, event_name='', start='', end='', per
 function submitEventCreation(formEvent, form, schedule_id= 1) {
     formEvent.preventDefault();
 
-    // make sure of the format later
-    let dbUpdateJson = {
+    let dbInsertJson = {
         schedule_id: schedule_id,
         event_name: form.elements[1].value,
         start: form.elements[2].value,
@@ -154,25 +159,140 @@ function submitEventCreation(formEvent, form, schedule_id= 1) {
         start_day: form.elements[4].value,
         period: form.elements[5].value
     };
-    postData(dbUpdateJson, '/eventInsert');
+
+    let jsonIsValid = validateJson(dbInsertJson);
+    if(!jsonIsValid) return -1;
+    
+    postData(dbInsertJson, '/eventInsert');
 
     let schedule = document.getElementById("schedule");
     while(schedule.firstChild)
         schedule.removeChild(schedule.lastChild);
     formSchedule();
 
-    let secondHeaderDiv = document.getElementById("secondHeaderDiv");
-    while(secondHeaderDiv.firstChild)
-        secondHeaderDiv.removeChild(secondHeaderDiv.lastChild);
-    // add the event button. Will need to be put in a seperate function after adding other buttons
-    let addEventButton = document.createElement('button');
-    addEventButton.innerHTML = "Add Event";
-    addEventButton.onclick = eventAddFormOnclick;
-    addEventButton.className = "addEventBtn";
-    secondHeaderDiv.appendChild(addEventButton);
+    drawOriginalHeader();
 }
 
-//#endregion for editing and adding events
+
+//#endregion adding events
+
+//#region form validation
+
+function validateJson(json){
+    // validation
+    if (json.event_name.length < 2 || 
+        json.event_name.length > 30) {
+            showErrorBanner("<b>Name </b> needs to be between 2 and 30 characters!", 6);
+            return false;
+    } else if(!validateTimeFormat(json.start)) {
+            showErrorBanner("<b>Start time</b> needs to be in format hh:mm!", 6);
+            return false;
+    } else if(!validateTimeFormat(json.end)){
+            showErrorBanner("<b>End time</b> needs to be in format hh:mm!", 6);
+            return false;
+    } else if(!validateDateFormat(json.start_day)) {
+            showErrorBanner("<b>Earliest event date </b> accepts dates in format yyyy-mm-dd!", 6);
+            return false;
+    } else if(!isNumeric(json.period) || 
+        Number(json.period) < 1) {
+            showErrorBanner("<b>Time period </b> needs to be at least 1 day!", 6);
+            return false;
+    } else if(!validateEventIntersection(json.start_day, json.start, json.end, json.period)){
+        showErrorBanner("Events cannot intersect!", 6);
+        return false;
+    } else return true;
+}
+
+// https://www.the-art-of-web.com/javascript/validate-date/
+function validateTimeFormat(timeVal) {
+    // regular expression to match required time format
+    var validatePattern = /^\d{1,2}:\d{2}([ap]m)?$/;
+    console.log(timeVal);
+    if(timeVal == '' || !timeVal.match(validatePattern))
+        return false;
+    else return true;
+}
+
+// https://webrewrite.com/validate-date-format-yyyymmdd-javascript/
+function validateDateFormat(dateVal){
+    if (dateVal == null) 
+        return false;
+    var validatePattern = /^(\d{4})(\/|-)(\d{1,2})(\/|-)(\d{1,2})$/;
+    var dateValues = dateVal.match(validatePattern);
+    if (dateValues == null) 
+        return false;
+
+    var dtYear = dateValues[1];
+    var dtMonth = dateValues[3];
+    var dtDay = dateValues[5];
+
+    if (dtMonth < 1 || dtMonth > 12) 
+        return false;
+    else if (dtDay < 1 || dtDay> 31) 
+        return false;
+    else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) 
+        return false;
+    else if (dtMonth == 2){ 
+        var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+        if (dtDay> 29 || (dtDay ==29 && !isleap)) 
+            return false;
+    }
+
+    return true;
+}
+
+function isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!  
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+            !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
+function validateEventIntersection(start_day, start, end, period){
+    for(let i=0; i<eventClassList.length; i++) {
+        // check if days collide
+        let collide = false;
+        let thisStartDate = new Date(start_day);
+        let otherStartDate = new Date(eventClassList[i].eventJson.start_day);
+        if(thisStartDate > otherStartDate) {
+            while(thisStartDate > otherStartDate) {
+                if(thisStartDate == otherStartDate) collide = true;
+                otherStartDate.setDate(otherStartDate.getDate() + eventClassList[i].eventJson.period);
+            }
+        } else {
+            while(thisStartDate < otherStartDate) {
+                if(thisStartDate == otherStartDate) collide = true;
+                thisStartDate.setDate(thisStartDate.getDate() + period);
+            }
+        }
+        // if yes, check if hours collide
+        if(collide) {
+            let thisStart = convertISOtimeToSeconds(start);
+            let otherStart = convertISOtimeToSeconds(eventClassList[i].start);
+            // let this end...
+            let thisEnd = convertISOtimeToSeconds(end);
+            let otherEnd = convertISOtimeToSeconds(eventClassList[i].end);
+
+            if((thisStart >= otherStart && thisStart < otherEnd) ||
+                otherStart >= thisStart && otherStart < thisEnd)
+                    return false;
+        }
+    }
+    return true;
+}
+
+function showErrorBanner(message, duration) {
+    let errorBanner = document.createElement("div");
+    errorBanner.className = "errorBanner";
+    let errorBannerText = document.createElement("p");
+    errorBannerText.innerHTML = message;
+    errorBanner.appendChild(errorBannerText);
+    document.body.appendChild(errorBanner);
+    setTimeout(function() {
+        document.body.removeChild(errorBanner);
+    }, duration * 1000);
+}
+
+//#endregion form validation
 
 //#region drawing events to schedule
 

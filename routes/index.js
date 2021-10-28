@@ -68,6 +68,16 @@ router.post('/eventSelect', function (req, res){
     });
 });
 
+router.post('/eventDelete', function(req, res){
+    q = "DELETE FROM Event WHERE event_id=?";
+    con.query(q, [req.body.event_id],  function(err, rows) {
+        if(err) throw err;
+        else {
+            res.json('{}');
+        }
+    });
+});
+
 router.post('/reqtest', function(req, res){
     console.log(req.body);
     res.json(JSON.stringify(req.body));

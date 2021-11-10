@@ -3,11 +3,22 @@ html
     head
         title= page_title
         meta(name="viewport" content="width=device-width, initial-scale=1")
-        link(rel="stylesheet", href="/stylesheets/style.css")
-        script(src="/javascripts/events.js")
-        script(src="/javascripts/editEvent.js") 
-        script(src="/javascripts/deleteEvent.js") 
+        link(rel="stylesheet", href="/stylesheets/schedule.css")
+        link(rel="stylesheet", href="/stylesheets/general.css")
+        script(src="/javascripts/header.js")
         script(src="/javascripts/schedule.js")
+        script(src="/javascripts/day.js")
+        script(src="/javascripts/helpers/constants.js")
+        script(src="/javascripts/helpers/validation.js")
+        script(src="/javascripts/helpers/dbCommunication.js")
+        script(src="/javascripts/helpers/timeCalculation.js")
+        script(src="/javascripts/helpers/dateCalculation.js")
+        script(src="/javascripts/events/eventClass.js")
+        script(src="/javascripts/events/events.js")
+        script(src="/javascripts/events/eventForm.js")
+        script(src="/javascripts/events/onclicks.js") 
+        script(src="/javascripts/week/week.js") 
+        script(src="/javascripts/month/month.js")
         script.
             window.onload = function(){
                 formSchedule();

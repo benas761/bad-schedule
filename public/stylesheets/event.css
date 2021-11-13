@@ -1,0 +1,46 @@
+.generalEventParent {
+	background-color: transparent;
+	margin: 0px;
+    margin-bottom: 5px;
+	height: fit-content;
+	min-height: 20px;
+}
+
+.eventDiv, .eventPopup {
+    border: solid;
+    border-width: 2px;
+    border-radius: 2px;
+    margin: 2px;
+    margin-right: 3px;
+    background-color: gainsboro;
+    overflow: hidden auto;
+}
+
+.eventText {
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+
+.eventBtn {
+    border: none;
+    height: fit-content;
+    /* background-color: rgb(194, 194, 194); */
+    background-color: transparent;
+    color:rgb(53, 35, 94);
+    margin-bottom: 4px;
+    margin-top: 3px;
+    padding: 0px;
+    cursor: pointer;
+}
+.eventEditBtn {
+    float: left;
+    padding-left: 5px;
+}
+.eventDeleteBtn {
+    float: right;
+    padding-right: 5px;
+}
+.eventBtn:hover {
+    text-underline-position: below;
+}

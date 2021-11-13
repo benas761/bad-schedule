@@ -15,13 +15,10 @@ function weekLayout(eventList) {
 
 	writeHours(seconds);
 
-	refreshEvents(eventList, seconds[0]); // changes global eventClassList
-	//eventClassList.forEach(eventClass => { eventClass.draw(); });
-
-	createWeekDays(eventList);
+	createWeekDays(eventList, seconds);
 }
 
-function createWeekDays(eventList) {
+function createWeekDays(eventList, seconds) {
 	let weekdays = findWeekdays();
 	let weekdayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -32,11 +29,30 @@ function createWeekDays(eventList) {
 			new Day(weekdays[i], header, eventList, i+2, 0)
 		);
 	}
-	let seconds = getDaySeconds(days);
 	for(let i=0; i<days.length; i++) {
 		days[i].createEventClasses(seconds);
 		days[i].drawWeek();
 	}
+}
+
+function findEventColumns(event){
+	let week = findWeekdays()
+	for(let i=0; i<7; i++){
+		// set times to 0 b/c we're comparing dates
+		week[i].setHours(0, 0, 0, 0);
+	}
+	let eventDay = new Date(event.start_day);
+	eventDay.setHours(0, 0, 0, 0);
+
+	let gridColumns = [];
+	for(let iterDay=eventDay; iterDay <= week[week.length-1]; iterDay.setDate(iterDay.getDate() + event.period)){
+		for(let i = 0; i<week.length; i++){
+			if(iterDay.getTime() == week[i].getTime()){
+				gridColumns.push(i+2+'/'+(i+3));
+			}
+		}
+	}
+	return gridColumns;
 }
 
 // called from Event.constructor

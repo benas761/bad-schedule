@@ -31,25 +31,21 @@ function setTime(events, hourMargin = 2){
 			convertISOtimeToSeconds(event.end) - convertISOtimeToSeconds(event.start)
 		);
 	}
-	let startSeconds = Math.min.apply(Math, starts);
-	let endSeconds   = Math.max.apply(Math, ends);
-	endSeconds += 3600;
-	// add 2 hours to start and end times if their period is short
+	let startSeconds, endSeconds;
+	if(starts.length == 0) {
+		startSeconds = 0;
+		endSeconds = 6*60*60;
+	} else {
+		startSeconds = Math.min.apply(Math, starts);
+		endSeconds   = Math.max.apply(Math, ends);
+	}
+	// add 2 hours to end times if their period is short
 	if(Math.max(differences) <= 4 * 3600)
 		endSeconds += hourMargin * 3600;
+	startSeconds -= 10 * 60;
 	if(startSeconds<1) startSeconds = 1;
-	if(endSeconds>24*60*60) endSeconds = 24*12; 
+	if(endSeconds>24*60*60) endSeconds = 24*60*60; 
 	return([startSeconds, endSeconds]);
-}
-
-function getDaySeconds(days){
-	let seconds = [Infinity, 0];
-	days.forEach(day => {
-		let daySeconds = setTime(day.events, 2);
-		if(daySeconds[0] < seconds[0]) seconds[0] = daySeconds[0];
-		if(daySeconds[1] > seconds[1]) seconds[1] = daySeconds[1];
-	});
-	return seconds;
 }
 
 function getRows(seconds) {

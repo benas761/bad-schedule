@@ -1,0 +1,42 @@
+
+/* mobile layout */
+@media only screen and (max-width: 760px) {
+    p, button, select , a, .scheduleHeaders { 
+        font-size: larger;
+    }
+    .formBtn {
+        font-size: medium;
+    }
+    .eventDiv {
+        grid-row: auto !important;
+        grid-column: auto !important;
+    }
+    .schedule {
+        grid-template-columns: auto !important;
+        grid-template-rows: auto !important;
+        display: block;
+        padding-top: 10px;
+    }
+    .rowDivider, .firstRowDivider, .columnDivider, .firstColumnDivider, .scheduleTime, .hideInMobile {
+        display: none;
+    }
+    .generalEventParent {
+        min-height: none;
+        margin-bottom: 5px;
+        border-bottom: solid;
+        border-width: thin;
+        padding-bottom: 5px;
+    }
+    .scheduleHeaders {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .eventDiv {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    .eventBtn {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+}

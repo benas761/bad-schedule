@@ -3,21 +3,21 @@
 }
 
 .headertext {
-    margin: 2px;
-    margin-left: 10px;
-    margin-right: 10px;
     color: white;
     text-decoration: none;
 }
 
 .headerlinkbox {
     float: right;
-    margin-bottom: 2px;
 }
 
 .header {
-    background-color: rgb(78, 124, 151);
+    background-color: rgb(124, 124, 124);
     margin: 0px;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 3px;
+    padding-top: 3px;
     overflow:hidden; /* to wrap floating links */
 }
 
@@ -42,6 +42,7 @@
 
 p {
     margin: 0px;
+    font-size: medium;
 }
 
 body {

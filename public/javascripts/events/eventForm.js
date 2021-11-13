@@ -1,10 +1,12 @@
 function createEventForm(form, input_class, event_name='', start='', end='', period='', day=''){
 	let eventNameInput = document.createElement("input");
 	eventNameInput.value = event_name;
+	eventNameInput.maxLength = 30;
+	eventNameInput.minLength = 3;
 	eventNameInput.classList.add("eventInput", input_class);
 
 	let eventTime0Par = document.createElement("p");
-	eventTime0Par.innerHTML = 'Start time';
+	eventTime0Par.innerText = 'Start time';
 	eventTime0Par.className = "eventText";
 
 	let eventTime0Input = document.createElement("input");
@@ -13,7 +15,7 @@ function createEventForm(form, input_class, event_name='', start='', end='', per
 	eventTime0Input.type = "time";
 
 	let eventTime1Par = document.createElement("p");
-	eventTime1Par.innerHTML = 'End time';
+	eventTime1Par.innerText = 'End time';
 	eventTime1Par.className = "eventText";
 
 	let eventTime1Input = document.createElement("input");
@@ -32,25 +34,25 @@ function createEventForm(form, input_class, event_name='', start='', end='', per
 	eventDayInput.type = "date";
 
 	let eventSaveButton = document.createElement("button");
-	eventSaveButton.innerHTML = 'save';
-	eventSaveButton.className = "formBtn";
+	eventSaveButton.innerText = 'save';
+	eventSaveButton.classList.add("formBtn", "submitBtn");
 	eventSaveButton.type = 'submit';
 
 	let eventCancelButton = document.createElement("button");
-	eventCancelButton.innerHTML = 'cancel';
+	eventCancelButton.innerText = 'cancel';
 	eventCancelButton.onclick = eraseEventPopup;
 	eventCancelButton.classList.add("formBtn", "cancelBtn");
 
 	let eventNamePar = document.createElement("p");
-	eventNamePar.innerHTML = 'Name';
+	eventNamePar.innerText = 'Name';
 	eventNamePar.className = "eventText";
 
 	let eventDayPar = document.createElement("p");
-	eventDayPar.innerHTML = 'Earliest event date';
+	eventDayPar.innerText = 'Earliest event date';
 	eventDayPar.className = "eventText";
 
 	let eventPeriodPar = document.createElement("p");
-	eventPeriodPar.innerHTML = 'Period in days';
+	eventPeriodPar.innerText = 'Period in days';
 	eventPeriodPar.className = "eventText";
 	
 	form.appendChild(eventNamePar);
@@ -63,7 +65,7 @@ function createEventForm(form, input_class, event_name='', start='', end='', per
 	form.appendChild(eventDayInput);
 	form.appendChild(eventPeriodPar);
 	form.appendChild(eventPeriodInput);
-	form.appendChild(eventCancelButton)
+	form.appendChild(eventCancelButton);
 	form.appendChild(eventSaveButton);
 }
 
@@ -77,7 +79,7 @@ function drawEventPopup(name, form) {
 	popup.onclick = function(event) { event.stopPropagation(); }
 
 	let popupName = document.createElement("p");
-	popupName.innerHTML = name;
+	popupName.innerText = name;
 	popup.appendChild(popupName);
 
 	popup.appendChild(form);
@@ -88,37 +90,14 @@ function drawEventPopup(name, form) {
 }
 
 function eraseEventPopup() {
-	let popup = document.getElementsByClassName("eventPopup")[0];
-	let popupVeil = document.getElementsByClassName("eventPopupVeil")[0];
+	let popups = document.getElementsByClassName("eventPopup");
+	let popupVeils = document.getElementsByClassName("eventPopupVeil");
 	
-	while(popup.firstChild)
-		popup.removeChild(popup.lastChild);
+	while(popups.length > 0) {
+		while(popups[0].firstChild)
+		popups[0].removeChild(popups[0].lastChild);
 
-	popupVeil.removeChild(popup);
-	document.body.removeChild(popupVeil);
-}
-
-function submitEventCreation(formEvent, form, schedule_id= 1) {
-	formEvent.preventDefault();
-
-	let dbInsertJson = {
-		schedule_id: schedule_id,
-		event_name: form.elements[1].value,
-		start: form.elements[2].value,
-		end: form.elements[3].value,
-		start_day: form.elements[4].value,
-		period: form.elements[5].value
-	};
-
-	let jsonIsValid = validateJson(dbInsertJson);
-	if(!jsonIsValid) return -1;
-	
-	postData(dbInsertJson, '/eventInsert');
-
-	let schedule = document.getElementById("schedule");
-	while(schedule.firstChild)
-		schedule.removeChild(schedule.lastChild);
-	formSchedule();
-
-	drawOriginalHeader();
+		popupVeils[0].removeChild(popups[0]);
+		document.body.removeChild(popupVeils[0]);
+	}
 }

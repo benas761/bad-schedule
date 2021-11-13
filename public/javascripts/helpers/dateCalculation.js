@@ -53,7 +53,7 @@ function writeWeekdays(){
         paragraph.id = weekdays[i].toLowerCase();
         paragraph.style.gridRow = "1/3";
         paragraph.style.gridColumn = (i+2) + "/" + (i+3);
-        paragraph.innerHTML = weekStr[i] + " " + weekdays[i];
+        paragraph.innerText = weekStr[i] + " " + weekdays[i];
         paragraph.className = "scheduleHeaders";
         document.getElementById("schedule").appendChild(paragraph);
     }

@@ -13,11 +13,17 @@ class Day{
 		let header = document.createElement('p');
 		header.style.gridRow = "1/3";
 		header.style.gridColumn = this.column;
-		header.innerHTML = this.header;
+		header.innerText = this.header;
 		header.className = "scheduleHeaders";
 
-		schedule = document.getElementById("schedule");
+		let mobileSpacer = document.createElement("div");
+		mobileSpacer.className = "generalEventParent";
+		mobileSpacer.style.gridRow = 3;
+		mobileSpacer.style.gridColumn = this.column;
+
+		let schedule = document.getElementById("schedule");
 		schedule.appendChild(header);
+		schedule.appendChild(mobileSpacer);
 
 		// draw the events of the day
 		for(let i=0; i<this.eventClasses.length; i++)
@@ -28,7 +34,7 @@ class Day{
 		let header = document.createElement("p");
 		header.style.gridRow = this.row;
 		header.style.gridColumn = this.column;
-		header.innerHTML = this.header;
+		header.innerText = this.header;
 		header.className = "scheduleHeaders";
 
 		

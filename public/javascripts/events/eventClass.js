@@ -16,18 +16,18 @@ class Event {
 		this.eventDiv.id = "eventDiv"+this.fullId;
 		this.eventDiv.className = "eventDiv";
 		this.eventName.id = "eventName"+this.fullId;
-		this.eventName.innerHTML = this.eventJson.event_name;
+		this.eventName.innerText = this.eventJson.event_name;
 		this.eventName.className = "eventText";
 		this.eventTime.id = "eventTime"+this.fullId;
 		this.eventTime.className = "eventText";
-		this.eventTime.innerHTML =  this.eventJson.start.substr(0, 5) + ' - ' + this.eventJson.end.substr(0, 5);
+		this.eventTime.innerText =  this.eventJson.start.substr(0, 5) + ' - ' + this.eventJson.end.substr(0, 5);
 		this.eventEdit.id = "eventEdit"+this.fullId;
-		this.eventEdit.innerHTML = "[edit]";
+		this.eventEdit.innerText = "[edit]";
 		this.eventEdit.classList.add("eventBtn", "eventEditBtn");
 		this.eventEdit.setAttribute('onclick', 
 			"eventEditOnclick('"+this.fullId+"')");
 		this.eventDelete.id = "eventDelete"+this.fullId;
-		this.eventDelete.innerHTML = "[delete]";
+		this.eventDelete.innerText = "[delete]";
 		this.eventDelete.classList.add("eventBtn", "eventDeleteBtn");
 		this.eventDelete.setAttribute('onclick', 
 			"eventDeleteOnclick('"+this.fullId+"')");
@@ -44,24 +44,5 @@ class Event {
 	delete() {
 		let event_id = this.eventJson.event_id;
 		submitEventDelete(event_id);
-	}
-	edit() {
-		// append inputs with childrens' values
-		// for simplicity, inputs are not saved inside the class
-		let form = document.createElement('form');
-		form.className = "eventAddForm";
-		
-		let startDayDate = new Date(this.eventJson.start_day);
-		let startDayString = startDayDate.toISOString().split('T')[0];
-	
-		createEventForm(form, "addEventInput", this.eventJson.event_name, this.eventJson.start.substr(0, 5), 
-			this.eventJson.end.substr(0, 5), this.eventJson.period, startDayString);
-	
-		drawEventPopup("Edit event", form);
-		
-		var eventId = this.eventJson.event_id;
-		form.addEventListener('submit', function(formEvent) { 
-			submitEventEdit(formEvent, form, eventId);
-		});
 	}
 }

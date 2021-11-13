@@ -1,0 +1,28 @@
+.secondHeaderDiv {
+    background-color: seashell;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 10px;
+    border: solid;
+    border-width: thin;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: fit-content;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.headerBtn {
+    border: solid;
+    border-color: gray;
+    border-width: thin;
+    padding: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    height: fit-content;
+    width: 6em;
+    background-color: rgb(194, 194, 194);
+    margin-left: 5px;
+}
+
+/* .headerSelect {} */

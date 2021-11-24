@@ -6,9 +6,13 @@ function validateJson(json){
 	// validation
 	if (json.event_name.length < 2 || 
 		json.event_name.length > 30) {
-			showErrorBanner("<b>Name </b> needs to be between 2 and 30 characters!", 6);
+			showErrorBanner("Name needs to be between 2 and 30 characters!", 6);
 			return false;
-	} else if(!eventCollision(json, events)) {
+	} else if(!time1_is_less(json.start, json.end)) {
+		showErrorBanner("Start time must be less than the end time!", 6);
+		return false;
+	}
+	else if(!eventCollision(json, events)) {
 		showErrorBanner("Cannot intersect with other events!", 5);
 		return false;
 	} else return true;
@@ -24,14 +28,8 @@ function gcd(a, b) { // greatest common denominator
 		let c = b;
 		b = a % b;
 		a = c;
-		console.log(b);
 	}
 	return a;
-    if (b == 0) {
-        return a; // so that the recursion does not go on forever
-    } else {
-        return gcd(b, a % b);
-    }
 }
 function lcm(a, b) { // least common multiple
     return a * b / gcd(a, b);
@@ -40,12 +38,11 @@ function lcm(a, b) { // least common multiple
 function eventCollision(event, events) {
 	for(let i=0; i<events.length; i++) {
 		// skip if the event is the same
-		console.log(events);
-		if(event.event_id != undefined && event.event_id != events[i].event_id) {
+		if(event.event_id != events[i].event_id) {
 			if(dates_match(event, events[i])) {
 				// check if hours collide
 				if(event.start > events[i].start && event.start < events[i].end ||
-				   events[i].start > event.start && events[i].start < event.end)
+					events[i].start > event.start && events[i].start < event.end)
 					return false;
 			}
 		}
@@ -73,6 +70,8 @@ function dates_match(event1, event2) {
 	}
 	return false;
 }
+
+function time1_is_less(time1, time2) { return true ? time1 < time2 : false }
 
 function showErrorBanner(message, duration) {
 	let errorBanner = document.createElement("div");

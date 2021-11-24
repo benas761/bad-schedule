@@ -1,9 +1,12 @@
 var mysql = require('mysql');
 var con = require('./database.js');
+const moment = require('moment');
 
 var ver = {};
+
+//#region event input verification
+
 ver.name = function(name) {
-	console.log(name);
 	if(2 > name.length > 31) return false;
 	return true;
 }
@@ -11,7 +14,7 @@ ver.name = function(name) {
 ver.eventCollision = function(event, events) {
 	for(let i=0; i<events.length; i++) {
 		// skip if the event is the same
-		if(event.event_id != undefined && event.event_id != events[i].event_id) {
+		if(event.event_id != events[i].event_id) {
 			if(dates_match(event, events[i])) {
 				// check if hours collide
 				if(event.start > events[i].start && event.start < events[i].end ||
@@ -27,6 +30,7 @@ ver.eventCollision = function(event, events) {
 ver.time = function(time) {
 	// regex magic
 	let regex = /^\d{1,2}:\d{2}([ap]m)?$/;
+	console.log("Time match:", time.match(regex));
 	if(time != '' && time.match(regex)){
 		return true;
 	} return false;
@@ -34,28 +38,25 @@ ver.time = function(time) {
 
 // https://stackoverflow.com/questions/22061723/regex-date-validation-for-yyyy-mm-dd
 ver.date = function(date) {
-	let regex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
-	if(date != '' && date.match(regex))
-		return true;
+	try {
+		var momentDate = moment(date);
+		if(momentDate.isValid()) return true;
+	} catch { return false; }
 	return false;
-}
-
-ver.checkNumber = function(number) {
-	console.log(number);
 }
 
 ver.times = function(start, end) {
 	if(ver.time(start) && ver.time(end)) {
-		console.log(start);
 		let startSecs = convertISOtimeToSeconds(start);
 		let endSecs = convertISOtimeToSeconds(end);
-		console.log(startSecs);
 		if(startSecs < endSecs) {
 			return true;
 		}
 	}
 	return false;
 }
+
+//#endregion
 
 module.exports = ver;
 

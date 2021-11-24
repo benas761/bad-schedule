@@ -3,22 +3,24 @@
 async function postData(data, header){
 	let options = {
 		method: 'POST',
-		headers: {
-			"Content-type": "application/json; charset=UTF-8"
-		},
+		headers: { "Content-type": "application/json; charset=UTF-8" },
 		body: JSON.stringify(data)
 	}
 	try {
 		const response = await fetch(header, options);
-		if(!response.ok) console.error(response);
-		return await response.json();
+		if(!response.ok) {
+			let res = await response.json();
+			showErrorBanner(res.error.message, 5);
+			console.log(res.error.message);
+			return res;
+		} else return await response.json();
 	} catch(e) { console.error('postData:', e); }
 }
 
 // for Event.edit() event listener
-async function submitEventEdit(formEvent, form, eventId, scheduleId){
+async function submitEventEdit(formEvent, form, eventId){
 	formEvent.preventDefault();
-	let dbUpdateJson = { event_id: eventId, schedule_id: scheduleId };
+	let dbUpdateJson = { event_id: eventId };
 	dbUpdateJson = getJsonFromForm(dbUpdateJson, form);
 	if(!dbUpdateJson) return;
 
@@ -26,10 +28,9 @@ async function submitEventEdit(formEvent, form, eventId, scheduleId){
 	resetSchedule();
 }
 
-function submitEventCreation(formEvent, form, schedule_id= 1) {
+function submitEventCreation(formEvent, form) {
 	formEvent.preventDefault();
-	let dbInsertJson = { schedule_id: schedule_id };
-	dbInsertJson = getJsonFromForm(dbInsertJson, form);
+	dbInsertJson = getJsonFromForm({}, form);
 	if(!dbInsertJson) return;
 	
 	postData(dbInsertJson, '/eventInsert');

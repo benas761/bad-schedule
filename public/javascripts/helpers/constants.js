@@ -2,6 +2,7 @@ var firstRowHeight = 15;
 var marginRowHeight = 20;
 var timeRowHeight = 6;
 var eventClassList = [];
+var loginToken = getCookie("loginToken");
 
 // set in header.js -> layoutChoice()
 var layout_type = getCookie("layout_type");
@@ -16,4 +17,8 @@ function setCookie(key, value) {
 function getCookie(key) {
 	var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
 	return keyValue ? keyValue[2] : null;
+}
+
+function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
 }

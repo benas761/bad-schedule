@@ -40,6 +40,7 @@ async function formSchedule(){
 }
 
 function resetSchedule() {
+	console.log("Schedule reset.");
 	let schedule = document.getElementById("schedule");
 	while(schedule.firstChild) {
 		schedule.removeChild(schedule.lastChild);

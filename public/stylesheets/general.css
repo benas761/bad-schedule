@@ -4,7 +4,8 @@
 
 .headertext {
     color: white;
-    text-decoration: none;
+    /* text-decoration: none; */
+    margin-left: 15px;
 }
 
 .headerlinkbox {
@@ -12,7 +13,7 @@
 }
 
 .header {
-    background-color: rgb(124, 124, 124);
+    background-color: rgb(134, 134, 134);
     margin: 0px;
     padding-left: 3%;
     padding-right: 3%;

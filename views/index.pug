@@ -27,13 +27,12 @@ html
                 drawOriginalHeader();
                 formSchedule();
             }
-    body()
+    body
         .header
             p.logo.headertext= page_title
             .headerlinkbox
-                a(href="https://github.com/benas761/bad-schedule", class="headertext") GitHub
+                a(href="/", onclick="logoutOnClick()", class="headertext") Log out
         #secondHeaderDiv.secondHeaderDiv
             //- h4.scheduleName= schedule_name
         #schedule.schedule
-        p= dbdata
         

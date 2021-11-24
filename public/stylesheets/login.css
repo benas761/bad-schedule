@@ -1,0 +1,92 @@
+.loginDiv {
+    background-color: gainsboro;
+    overflow: hidden auto;
+	width: 400px;
+    height: fit-content;
+    margin: auto;
+	margin-top: 30px;
+	border: solid;
+    border-width: 2px;
+    border-radius: 10px;
+    padding: 20px;
+    padding-top: 10px;
+}
+.loginDiv p {
+	font-size: large;
+}
+
+.loginForm {
+    display: inline-block;
+    width: 100%;
+    margin: auto;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 5px;
+    padding-top: 5px;
+}
+.loginForm p {
+    color: black;
+    margin-left: 7%;
+    border-bottom: solid;
+    border-width: thin;
+    margin-bottom: 2px;
+    width: 30%;
+    font-size: smaller;
+	padding-top: 5px;
+}
+
+.loginInput {
+    background-color: transparent;
+    /* border-bottom-left-radius: 5px; */
+    height: auto;
+    width: 85%;
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-width: auto;
+    border-top: transparent;
+    border-left: transparent;
+    border-right: transparent;
+    /* border-color: rgba(29, 46, 56, 0.6); */
+    margin-bottom: 5px;
+    margin-left: 7%;
+    margin-right: 7%;
+    font-size: medium;
+}
+.loginInput:focus {
+    outline: none;
+    background-color: rgba(120, 138, 148, 0.3);
+}
+.loginInput:hover {
+    background-color: rgba(120, 138, 148, 0.3);
+}
+
+.loginBtn {
+	/* float: right; */
+	border: solid;
+	border-color: gray;
+	border-width: thin;
+	height: fit-content;
+	width: 12em;
+	background-color: rgb(194, 194, 194);
+	display: block;
+	margin: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	cursor: pointer;
+}
+
+.registerLink {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    margin-top: 5px;
+    display: flex;
+}
+
+
+body {
+    background-color: seashell;
+}

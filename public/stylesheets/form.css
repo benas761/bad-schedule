@@ -8,6 +8,16 @@
     left: 0;
     top: 0;
 }
+
+.eventDiv, .eventPopup {
+    border: solid;
+    border-width: 2px;
+    border-radius: 2px;
+    margin: 2px;
+    margin-right: 3px;
+    background-color: gainsboro;
+    overflow: hidden auto;
+}
 .eventPopup {
     width: 300px;
     height: fit-content;

@@ -39,4 +39,14 @@
         margin-top: 5px;
         margin-bottom: 5px;
     }
+    .secondHeaderDiv {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media print {
+    .header {
+        display: none;
+    }
 }

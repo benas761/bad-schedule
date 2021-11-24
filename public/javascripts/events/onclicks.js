@@ -48,14 +48,18 @@ Event.prototype.edit = function() {
 	drawEventPopup("Edit event", form);
 	
 	var eventId = this.eventJson.event_id;
-	var scheduleId = this.eventJson.schedule_id;
 	form.addEventListener('submit', function(formEvent) { 
 		// in dbCommunication.js
-		submitEventEdit(formEvent, form, eventId, scheduleId);
+		submitEventEdit(formEvent, form, eventId);
 		eraseEventPopup();
 	});
 }
 
 function exportOnClick() {
 	print();
+}
+
+function logoutOnClick() {
+	eraseCookie("loginToken");
+	eraseCookie("schedule");
 }

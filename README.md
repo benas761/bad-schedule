@@ -27,3 +27,4 @@ A horrible attempt at making a schedule website.
   - insert the first rows
     - `INSERT INTO User(username, password) VALUES('default', '');`
     - `INSERT INTO Schedule(user_id, schedule_name) VALUES(1, 'default');`
+- Create .env file that describes your database connenction with variables DB_HOST, DB_USER, DB_PASSWORD and DB_DATABASE.

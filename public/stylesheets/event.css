@@ -6,16 +6,6 @@
 	min-height: 20px;
 }
 
-.eventDiv, .eventPopup {
-    border: solid;
-    border-width: 2px;
-    border-radius: 2px;
-    margin: 2px;
-    margin-right: 3px;
-    background-color: gainsboro;
-    overflow: hidden auto;
-}
-
 .eventText {
     margin-right: 5px;
     margin-left: 5px;

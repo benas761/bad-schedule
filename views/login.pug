@@ -1,0 +1,38 @@
+doctype html
+html
+	head
+		title= page_title
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="stylesheet", href="/stylesheets/login.css")
+		link(rel="stylesheet", href="/stylesheets/media.css")
+		link(rel="stylesheet", href="/stylesheets/general.css")
+		link(rel="stylesheet", href="/stylesheets/form.css")
+		script(src="/javascripts/helpers/dbCommunication.js") 
+		script(src="/javascripts/login/loginForm.js", defer)
+		script(src="/javascripts/helpers/validation.js")
+		script(src="/javascripts/helpers/constants.js") 
+	body
+		.header
+			p.logo.headertext= page_title
+			.headerlinkbox
+				a(href="https://github.com/benas761/bad-schedule", class="headertext") GitHub
+		#login.loginDiv
+			p=type
+			if type == "Login"
+				- var form_name = "loginForm"
+			else
+				- var form_name = "registerForm"
+			
+			form(id=form_name, class="loginForm")
+				p Username
+				input.loginInput(type="text")
+				p Password
+				input.loginInput(type="password")
+				if type == "Register"
+					p Confirm password
+					input.loginInput(type="password", value="")
+				input.loginBtn(type="submit", value=type)
+			
+			if type == "Login"
+				.registerLink
+					a(href="/register", class="registerLink") Register

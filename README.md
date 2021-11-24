@@ -23,7 +23,7 @@ A horrible attempt at making a schedule website.
     - `CREATE TABLE Schedule(schedule_id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, schedule_name VARCHAR(255) NOT NULL);`
     - `ALTER TABLE Schedule ADD CONSTRAINT fk_user_id FOREIGN KEY(user_id) REFERENCES User(user_id) ON DELETE CASCADE ON UPDATE RESTRICT;`
     - `CREATE TABLE Event(event_id INT AUTO_INCREMENT PRIMARY KEY, schedule_id INT NOT NULL, event_name VARCHAR(255), start TIME NOT NULL, end TIME NOT NULL, start_day DATE NOT NULL, period INT UNSIGNED);`
-    - `ALTER TABLE Event ADD CONSTRAINT fk_schedule_id FOREIGN KEY(schedule_id) REFERENCES User(user_id) ON DELETE CASCADE ON UPDATE RESTRICT;`
+    - `ALTER TABLE Event ADD CONSTRAINT fk_schedule_id FOREIGN KEY(schedule_id) REFERENCES Schedule(schedule_id) ON DELETE CASCADE ON UPDATE RESTRICT;`
   - insert the first rows
     - `INSERT INTO User(username, password) VALUES('default', '');`
     - `INSERT INTO Schedule(user_id, schedule_name) VALUES(1, 'default');`

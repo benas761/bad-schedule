@@ -5,7 +5,7 @@ let ver = {};
 //#region event input verification
 
 ver.name = function(name) {
-	return !!(2 <= name.length <= 31);
+	return (2 <= name.length && name.length <= 31);
 }
 
 ver.eventCollision = function(event, events) {
@@ -27,8 +27,8 @@ ver.eventCollision = function(event, events) {
 ver.time = function(time) {
 	// regex magic
 	let regex = /^\d{1,2}:\d{2}([ap]m)?$/;
-	console.log("Time match:", time.match(regex));
-	return (time != '' && time.match(regex));
+	if (time != '' && time.match(regex)) return true;
+	return false;
 }
 
 // https://stackoverflow.com/questions/22061723/regex-date-validation-for-yyyy-mm-dd

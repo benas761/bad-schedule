@@ -2,8 +2,7 @@ sync.sh
 node_modules/*
 .env
 sonar-project.properties
-.scannerwork/.sonar_lock
-.scannerwork/report-task.txt
+.scannerwork
 node_modules
 coverage
 .vs

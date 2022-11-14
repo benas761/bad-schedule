@@ -49,7 +49,3 @@ function exportButton(parent) {
 	exportButton.className = "headerBtn";
 	parent.appendChild(exportButton);
 }
-
-function scheduleName(){
-	// not necessary until 4th iteration
-}

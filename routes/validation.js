@@ -11,13 +11,10 @@ ver.name = function(name) {
 ver.eventCollision = function(event, events) {
 	for(let _event of events) {
 		// skip if the event is the same
-		if(event.event_id != _event.event_id) {
-			if(dates_match(event, _event)) {
-				// check if hours collide
-				if(event.start > _event.start && event.start < _event.end ||
-				   _event.start > event.start && _event.start < event.end)
-					return false;
-			}
+		if(event.event_id != _event.event_id && 
+		   dates_match(event, _event) && 
+		   timesCollide(event, _event)) {
+				return false;
 		}
 	}
 	return true;
@@ -86,6 +83,10 @@ function dates_match(event1, event2) {
 		if(i == day2) return true;
 	}
 	return false;
+}
+function timesCollide(event1, event2) {
+	return (event1.start > event2.start && event1.start < event2.end ||
+			event2.start > event1.start && event2.start < event1.end)
 }
 function convertISOtimeToSeconds(timeString){
 	let timeStrings = timeString.split(":");

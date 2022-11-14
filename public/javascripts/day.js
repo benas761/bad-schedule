@@ -37,7 +37,6 @@ class Day{
 		header.innerText = this.header;
 		header.className = "scheduleHeaders";
 
-		
 		let parentDiv = document.createElement("div");
 		parentDiv.className = "generalEventParent";
 		parentDiv.style.gridRow = this.row + 1;

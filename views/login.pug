@@ -1,5 +1,5 @@
 doctype html
-html
+html(lang="en")
 	head
 		title= page_title
 		meta(name="viewport" content="width=device-width, initial-scale=1")
@@ -24,13 +24,13 @@ html
 				- var form_name = "registerForm"
 			
 			form(id=form_name, class="loginForm")
-				p Username
-				input.loginInput(type="text")
-				p Password
-				input.loginInput(type="password")
+				label(for="loginUsername") Username
+				input.loginInput(type="text", id="loginUsername")
+				label(for="loginPassword") Password
+				input.loginInput(type="password", id="loginPassword")
 				if type == "Register"
-					p Confirm password
-					input.loginInput(type="password", value="")
+					label(for="loginConfirm") Confirm password
+					input.loginInput(type="password", value="", id="loginConfirm")
 				input.loginBtn(type="submit", value=type)
 			
 			if type == "Login"

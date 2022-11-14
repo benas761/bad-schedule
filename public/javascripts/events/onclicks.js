@@ -19,7 +19,6 @@ function eventDeleteOnclick(eventFullId){
 	eventClassList.forEach(eventClass => {
 		if(eventClass.fullId == eventFullId){
 			eventClass.delete();
-			break;
 		}
 	});
 }
@@ -28,7 +27,6 @@ function eventEditOnclick(eventFullId){
 	for(let eventClass of eventClassList) {
 		if(eventClass.fullId == eventFullId){
 			eventClass.edit();
-			break;
 		}
 	}
 }

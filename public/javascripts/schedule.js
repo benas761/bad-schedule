@@ -47,7 +47,3 @@ function resetSchedule() {
 	}
 	formSchedule();
 }
-
-// tech used - pug, expressJS (node.js)
-// depends on nodejs and npm
-// build with "npm install" and run with "npm run"

@@ -1,10 +1,10 @@
-var express = require('express');
-var mysql = require('mysql');
-var router = express.Router();
-var con = require('./database.js');
-var app = require('../app');
-var ver = require('./validation.js');
-var jwt = require('jsonwebtoken');
+let express = require('express');
+let mysql = require('mysql');
+let router = express.Router();
+let con = require('./database.js');
+let app = require('../app');
+let ver = require('./validation.js');
+let jwt = require('jsonwebtoken');
 const {insertPost, updatePost, eventPost, deletePost, schedulePost} = require('./posts.js');
 const {registerGet, loginGet, tokenPost, registerPost} = require("./login.js");
 const {rootGet} = require('./gets.js')
@@ -15,7 +15,7 @@ router.get('/login', loginGet);
 router.post('/tokenPost', tokenPost);
 router.post('/registerPost', verifyRegister, registerPost);
 
-var middleware = [tokenCheck];
+let middleware = [tokenCheck];
 
 router.post('/schedulePost', middleware, schedulePost);
 

@@ -1,9 +1,9 @@
 function writeHours(seconds, rowMargin = 0){
-	var startRow = rowMargin + 3;
-	var endRow = Math.round((seconds[1]-seconds[0])/60/5) + startRow;
-	var roundedSeconds = Math.round(seconds[0]/60/5)*60*5;
+	let startRow = rowMargin + 3;
+	let endRow = Math.round((seconds[1]-seconds[0])/60/5) + startRow;
+	let roundedSeconds = Math.round(seconds[0]/60/5)*60*5;
 	// how many five minute intervals are needed to reach a clean hour
-	var cleanColumnHour = 12 - ((roundedSeconds/60/5) % 12);
+	let cleanColumnHour = 12 - ((roundedSeconds/60/5) % 12);
 	// draw the first time if it's not close to a clean time
 	if(cleanColumnHour>3){
 		let timestamp = document.createElement('p');

@@ -19,16 +19,16 @@ function eventDeleteOnclick(eventFullId){
 	eventClassList.forEach(eventClass => {
 		if(eventClass.fullId == eventFullId){
 			eventClass.delete();
-			return;
+			break;
 		}
 	});
 }
 
 function eventEditOnclick(eventFullId){
-	for(let i=0; i<eventClassList.length; i++) {
-		if(eventClassList[i].fullId == eventFullId){
-			eventClassList[i].edit();
-			return;
+	for(let eventClass of eventClassList) {
+		if(eventClass.fullId == eventFullId){
+			eventClass.edit();
+			break;
 		}
 	}
 }
@@ -47,7 +47,7 @@ Event.prototype.edit = function() {
 
 	drawEventPopup("Edit event", form);
 	
-	var eventId = this.eventJson.event_id;
+	let eventId = this.eventJson.event_id;
 	form.addEventListener('submit', function(formEvent) { 
 		// in dbCommunication.js
 		submitEventEdit(formEvent, form, eventId);

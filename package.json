@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "DEBUG=schedule:* nodemon ./bin/www"
+    "devstart": "DEBUG=schedule:* nodemon ./bin/www",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "argon2": "^0.28.2",
@@ -21,6 +22,7 @@
     "pug": "^3.0.2"
   },
   "devDependencies": {
+    "jest": "^29.3.1",
     "nodemon": "^2.0.13"
   }
 }

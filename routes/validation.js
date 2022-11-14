@@ -1,24 +1,21 @@
-var mysql = require('mysql');
-var con = require('./database.js');
 const moment = require('moment');
 
-var ver = {};
+let ver = {};
 
 //#region event input verification
 
 ver.name = function(name) {
-	if(2 > name.length > 31) return false;
-	return true;
+	return !!(2 <= name.length <= 31);
 }
 
 ver.eventCollision = function(event, events) {
-	for(let i=0; i<events.length; i++) {
+	for(let _event of events) {
 		// skip if the event is the same
-		if(event.event_id != events[i].event_id) {
-			if(dates_match(event, events[i])) {
+		if(event.event_id != _event.event_id) {
+			if(dates_match(event, _event)) {
 				// check if hours collide
-				if(event.start > events[i].start && event.start < events[i].end ||
-				   events[i].start > event.start && events[i].start < event.end)
+				if(event.start > _event.start && event.start < _event.end ||
+				   _event.start > event.start && _event.start < event.end)
 					return false;
 			}
 		}
@@ -31,15 +28,13 @@ ver.time = function(time) {
 	// regex magic
 	let regex = /^\d{1,2}:\d{2}([ap]m)?$/;
 	console.log("Time match:", time.match(regex));
-	if(time != '' && time.match(regex)){
-		return true;
-	} return false;
+	return (time != '' && time.match(regex));
 }
 
 // https://stackoverflow.com/questions/22061723/regex-date-validation-for-yyyy-mm-dd
 ver.date = function(date) {
 	try {
-		var momentDate = moment(date);
+		let momentDate = moment(date);
 		if(momentDate.isValid()) return true;
 	} catch { return false; }
 	return false;
@@ -95,8 +90,8 @@ function dates_match(event1, event2) {
 function convertISOtimeToSeconds(timeString){
 	let timeStrings = timeString.split(":");
 	let timeFloat = [];
-	for(let i=0; i<timeStrings.length; i++)
-		timeFloat.push(Number(timeStrings[i]));
+	for(let timeString of timeStrings)
+		timeFloat.push(Number(timeString));
 	// could check length to make sure of the data
 	if(timeFloat.length == 2) return timeFloat[0] * 3600 + timeFloat[1] * 60;
 	else return timeFloat[0] * 3600 + timeFloat[1] * 60 + timeFloat[2];

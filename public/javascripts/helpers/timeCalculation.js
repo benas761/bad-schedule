@@ -10,12 +10,12 @@ function convertISOtimeToSeconds(timeString){
 function convertSecondsToISOtime(seconds){
 	let date = new Date(null);
 	date.setSeconds(seconds);
-	return date.toISOString().substr(11, 8);
+	return date.toISOString().substring(11, 19);
 }
 function convertSecondsToHHMM(seconds){
 	let date = new Date(null);
 	date.setSeconds(seconds);
-	return date.toISOString().substr(11, 5);
+	return date.toISOString().substring(11, 16);
 }
 
 
@@ -23,8 +23,7 @@ function setTime(events, hourMargin = 2){
 	// calculate schedule time period
 	//  if time period comes out to four or less hours, make it have a 2 hours free before and after
 	let starts = [], ends = [], differences = [];
-	for(let i=0; i<events.length; i++){
-		let event = events[i];
+	for(let event of events){
 		starts.push(convertISOtimeToSeconds(event.start));
 		ends.push(convertISOtimeToSeconds(event.end));
 		differences.push(

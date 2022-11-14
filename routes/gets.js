@@ -1,8 +1,8 @@
-var con = require('./database.js');
+let con = require('./database.js');
 const { scheduleCheck } = require('./middleware.js');
 
 function rootGet(req, res) {
-	q = "SELECT schedule_name FROM Schedule WHERE schedule_id=?";
+	const q = "SELECT schedule_name FROM Schedule WHERE schedule_id=?";
 	con.query(q, [req.schedule], function(err, qres) {
 		if(err) console.log(err);
 		console.log("Schedule cookie:", req.schedule);
@@ -12,7 +12,6 @@ function rootGet(req, res) {
 			schedule_name: qres[0].schedule_name
 		});
 	});
-	//res.render('index', { pagetitle: 'Schedule' });
 }
 
 module.exports = {rootGet}

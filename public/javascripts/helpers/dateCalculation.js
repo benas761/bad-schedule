@@ -10,10 +10,10 @@ function findWeekdays(curr = new Date()){
 }
 
 function findMonthDays(year = new Date().getFullYear(), month = new Date().getMonth()) {
-    var date = new Date(year, month, 1);
+    let date = new Date(year, month, 1);
     // start from monday
     let monday = new Date(date.setDate(date.getDate() - date.getDay() + 1));
-    var result = [];
+    let result = [];
     while (monday.getMonth() <= month || monday.getDay() != 1) {
         result.push(new Date(monday));
         monday.setDate(monday.getDate() + 1);
@@ -22,10 +22,10 @@ function findMonthDays(year = new Date().getFullYear(), month = new Date().getMo
 }
 
 function findYearDays(year = new Date().getFullYear()) {
-    var date = new Date(year, 0, 1);
+    let date = new Date(year, 0, 1);
     // start from monday
     let monday = new Date(date.setDate(date.getDate() - date.getDay() + 1));
-    var result = [];
+    let result = [];
     while (monday.getFullYear() <= year || monday.getDay() != 1) {
         result.push(new Date(monday));
         monday.setDate(monday.getDate() + 1);

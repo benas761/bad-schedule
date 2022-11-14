@@ -22,9 +22,9 @@ function generalLayout(eventList, dates) {
 		let day = new Day(dates[i], header, eventList, column, Math.floor(i/7)*2+1);
 		days.push(day);
 	}
-	for(let i=0; i<days.length; i++) {
-		days[i].createEventClasses();
-		days[i].drawGeneral();
+	for(let day of days) {
+		day.createEventClasses();
+		day.drawGeneral();
 	}
 	return 0;
 }

@@ -29,9 +29,9 @@ function createWeekDays(eventList, seconds) {
 			new Day(weekdays[i], header, eventList, i+2, 0)
 		);
 	}
-	for(let i=0; i<days.length; i++) {
-		days[i].createEventClasses(seconds);
-		days[i].drawWeek();
+	for(let day of days) {
+		day.createEventClasses(seconds);
+		day.drawWeek();
 	}
 }
 
@@ -57,9 +57,9 @@ function findEventColumns(event){
 
 // called from Event.constructor
 Event.prototype.weekLayout = function(startSeconds, gridColumn, rowMargin) {
-    var eventDivStart = Math.round(
+    let eventDivStart = Math.round(
         (convertISOtimeToSeconds(this.eventJson.start)-startSeconds)/60/5)+3+rowMargin;
-    var eventDivEnd = Math.round(
+    let eventDivEnd = Math.round(
         (convertISOtimeToSeconds(this.eventJson.end) - startSeconds)/60/5)+3+rowMargin;
 
     this.eventDiv.style.gridRow = (eventDivStart)+'/'+eventDivEnd;
@@ -67,8 +67,8 @@ Event.prototype.weekLayout = function(startSeconds, gridColumn, rowMargin) {
 }
 
 function drawWeekColumnDividers(seconds, rowMargin= 0) {
-	var startRow = 1;
-	var endRow = Math.round((seconds[1]-seconds[0])/60/5) + rowMargin + 3;
+	let startRow = 1;
+	let endRow = Math.round((seconds[1]-seconds[0])/60/5) + rowMargin + 3;
 
 	for(let i=1; i<8; i++){
 		let columnDivider = document.createElement('div');
@@ -81,11 +81,11 @@ function drawWeekColumnDividers(seconds, rowMargin= 0) {
 }
 
 function drawWeekRowDividers(seconds, rowMargin = 0) {
-	var startRow = rowMargin + 3;
-	var endRow = getRows(seconds) + 2;
-	var roundedSeconds = Math.round(seconds[0]/60/5)*60*5;
+	let startRow = rowMargin + 3;
+	let endRow = getRows(seconds) + 2;
+	let roundedSeconds = Math.round(seconds[0]/60/5)*60*5;
 	// how many five minute intervals are needed to reach a clean hour
-	var cleanColumnHour = 12 - ((roundedSeconds/60/5) % 12);
+	let cleanColumnHour = 12 - ((roundedSeconds/60/5) % 12);
 	// draw the first time if it's not close to a clean time
 	if(cleanColumnHour>3){
 		let rowDivider = document.createElement('div');

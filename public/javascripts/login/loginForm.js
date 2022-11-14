@@ -1,4 +1,4 @@
-var loginForm = document.getElementById("loginForm");
+let loginForm = document.getElementById("loginForm");
 if(loginForm != null) {
 	loginForm.addEventListener('submit', async (formEvent) => {
 		formEvent.preventDefault();
@@ -9,9 +9,8 @@ if(loginForm != null) {
 		await login(formInfo);
 	});
 }
-
 else {
-	var loginForm = document.getElementById("registerForm");
+	loginForm = document.getElementById("registerForm");
 	loginForm.addEventListener('submit', async (formEvent) => {
 		formEvent.preventDefault();
 		let formInfo = {

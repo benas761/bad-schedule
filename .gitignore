@@ -1,3 +1,10 @@
 sync.sh
 node_modules/*
 .env
+sonar-project.properties
+.scannerwork/.sonar_lock
+.scannerwork/report-task.txt
+node_modules
+coverage
+.vs
+.vscode

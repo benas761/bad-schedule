@@ -1,11 +1,12 @@
-var con = require('./database.js');
-var jwt = require('jsonwebtoken');
-var ver = require('./validation.js')
+let con = require('./database.js');
+let jwt = require('jsonwebtoken');
+let ver = require('./validation.js')
 
 // middleware before every post/get
 function tokenCheck(req, res, next) {
+	let token = undefined;
 	try {
-		var token = getCookie(req.headers.cookie, "loginToken");
+		token = getCookie(req.headers.cookie, "loginToken");
 	} catch {
 		console.log("No token in cookies!");
 		return res.redirect('/login');
@@ -24,8 +25,6 @@ function tokenCheck(req, res, next) {
 			}
 			req.decoded = decoded;
 			req.user = decoded.user_id;
-
-			// console.log("decoded token: ", decoded);
 			next();
 		});
 	} else {
@@ -60,7 +59,7 @@ function verifyRegister(req, res, next) {
 	// confirmed password must match
 	
 	// only allow latin letters and numbers
-	var username_regex = /[^a-z0-9A-Z]+/g
+	let username_regex = /[^a-z0-9A-Z]+/g
 	if(req.body.name.length > 16 || req.body.name.length < 5)
 		return res.status(403).send({success: false, 
 			error: {message: "Username must be between 5 and 16 characters in length!"}});

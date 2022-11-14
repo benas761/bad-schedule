@@ -10,6 +10,8 @@
     .eventDiv {
         grid-row: auto !important;
         grid-column: auto !important;
+        margin-left: 10px;
+        margin-right: 10px;
     }
     .schedule {
         grid-template-columns: auto !important;
@@ -28,10 +30,6 @@
         padding-bottom: 5px;
     }
     .scheduleHeaders {
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-    .eventDiv {
         margin-left: 10px;
         margin-right: 10px;
     }

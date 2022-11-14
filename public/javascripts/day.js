@@ -26,8 +26,8 @@ class Day{
 		schedule.appendChild(mobileSpacer);
 
 		// draw the events of the day
-		for(let i=0; i<this.eventClasses.length; i++)
-			this.eventClasses[i].draw(schedule);
+		for(let eventClass of this.eventClasses)
+			eventClass.draw(schedule);
 	}
 	drawGeneral() {
 		// draw the header
@@ -44,8 +44,8 @@ class Day{
 		parentDiv.style.gridColumn = this.column;
 
 		// store events in a day's div
-		for(let i=0; i<this.eventClasses.length; i++)
-			this.eventClasses[i].draw(parentDiv);
+		for(let eventClass of this.eventClasses)
+			eventClass.draw(parentDiv);
 
 		if(this.eventClasses.length == 0) {
 			parentDiv.classList.add("hideInMobile");
@@ -60,16 +60,16 @@ class Day{
 
 Day.prototype.createEventClasses = function(seconds = [undefined]) {
 	this.eventClasses = []
-	for(let i=0; i<this.events.length; i++) {
+	for(let event of this.events) {
 		this.eventClasses.push(
-			new Event(this.events[i], seconds[0], this.column, this.header, this.rowMargin)
+			new Event(event, seconds[0], this.column, this.header, this.rowMargin)
 		);
 	}
 }
 
 function filterEvents(events, date) {
 	// find events that happen each week
-	filteredEvents = []
+	let filteredEvents = []
 	// set times to 0 b/c we're comparing dates
 	let dayMidnight = date;
 	dayMidnight.setHours(0, 0, 0, 0);

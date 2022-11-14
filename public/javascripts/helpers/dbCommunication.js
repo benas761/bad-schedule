@@ -30,7 +30,7 @@ async function submitEventEdit(formEvent, form, eventId){
 
 function submitEventCreation(formEvent, form) {
 	formEvent.preventDefault();
-	dbInsertJson = getJsonFromForm({}, form);
+	let dbInsertJson = getJsonFromForm({}, form);
 	if(!dbInsertJson) return;
 	
 	postData(dbInsertJson, '/eventInsert');

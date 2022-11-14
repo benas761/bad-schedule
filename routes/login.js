@@ -1,5 +1,5 @@
 const dotenv = require('dotenv').config();
-var con = require('./database.js');
+let con = require('./database.js');
 let jwt = require('jsonwebtoken');
 const ver = require('./validation.js');
 const argon2 = require('argon2');

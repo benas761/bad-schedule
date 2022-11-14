@@ -95,7 +95,7 @@ function eraseEventPopup() {
 	
 	while(popups.length > 0) {
 		while(popups[0].firstChild)
-		popups[0].removeChild(popups[0].lastChild);
+			popups[0].removeChild(popups[0].lastChild);
 
 		popupVeils[0].removeChild(popups[0]);
 		document.body.removeChild(popupVeils[0]);

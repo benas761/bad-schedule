@@ -1,5 +1,5 @@
 function drawOriginalHeader(){
-	header = document.getElementById("secondHeaderDiv");
+	let header = document.getElementById("secondHeaderDiv");
 	eraseHeader();
 	addEventButton(header);
 	layoutChoice(header);
@@ -26,7 +26,7 @@ function layoutChoice(parent) {
 	layoutChoice.id = "layoutSelect";
 	layoutChoice.addEventListener('change',  function() {
 		let layout = document.getElementById("layoutSelect"); 
-		layout_type = layout.selectedOptions[0].value;
+		let layout_type = layout.selectedOptions[0].value;
 		setCookie("layout_type", layout_type)
 		resetSchedule();
 	});

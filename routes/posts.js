@@ -1,4 +1,4 @@
-var con = require('./database.js');
+let con = require('./database.js');
 
 function schedulePost(req, res) {
 	// get user id from the token (token validity is guaranteed by middleware)
@@ -33,7 +33,7 @@ async function updatePost (req, res){
 	", start_day = "+req.body.start_day+", period = "+
 	req.body.period+" WHERE event_id = "+req.body.event_id);
 
-	query = `UPDATE Event SET event_name = ?, start = ?, end = ?, 
+	const query = `UPDATE Event SET event_name = ?, start = ?, end = ?, 
 		start_day = ?, period = ? WHERE event_id = ?`;
 	con.query(query, [req.body.event_name, req.body.start, req.body.end, 
 		req.body.start_day, req.body.period, req.body.event_id], 
@@ -48,7 +48,7 @@ async function updatePost (req, res){
 
 function eventPost (req, res){
 	console.log("SELECT * FROM Event WHERE schedule_id =", req.schedule);
-	q = `SELECT event_id, schedule_id, event_name, start, end, 
+	const q = `SELECT event_id, schedule_id, event_name, start, end, 
 		DATE_FORMAT(start_day, '%Y-%m-%d') as start_day, period 
 		FROM Event WHERE schedule_id=?`;
 	con.query(q, [req.schedule], function(err, rows) {
@@ -62,7 +62,7 @@ function eventPost (req, res){
 }
 
 function deletePost(req, res){
-	let q = "DELETE FROM Event WHERE event_id=?";
+	const q = "DELETE FROM Event WHERE event_id=?";
 	con.query(q, [req.body.event_id],  function(err, rows) {
 		if(err) throw err;
 		else {

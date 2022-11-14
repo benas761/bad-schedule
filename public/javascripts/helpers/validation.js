@@ -1,8 +1,8 @@
 function validateJson(json){
 	// get all events from the class list
 	let events = [];
-	for(let i = 0; i< eventClassList.length; i++)
-		events.push(eventClassList[i].eventJson);
+	for(let eventClass of eventClassList)
+		events.push(eventClass.eventJson);
 	// validation
 	if (json.event_name.length < 2 || 
 		json.event_name.length > 30) {
@@ -36,13 +36,13 @@ function lcm(a, b) { // least common multiple
 }
 
 function eventCollision(event, events) {
-	for(let i=0; i<events.length; i++) {
+	for(let _event of events) {
 		// skip if the event is the same
-		if(event.event_id != events[i].event_id) {
-			if(dates_match(event, events[i])) {
+		if(event.event_id != _event.event_id) {
+			if(dates_match(event, _event)) {
 				// check if hours collide
-				if(event.start > events[i].start && event.start < events[i].end ||
-					events[i].start > event.start && events[i].start < event.end)
+				if(event.start > _event.start && event.start < _event.end ||
+					_event.start > event.start && _event.start < event.end)
 					return false;
 			}
 		}

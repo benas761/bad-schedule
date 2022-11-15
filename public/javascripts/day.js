@@ -87,9 +87,9 @@ function filterEvents(events, date) {
 	});
 
 	// sort the events to draw them in order of time
-	filteredEvents.sort(function(a, b) {
-		if(a.start < b.start) return -1;
-		else if (a.start > b.start) return 1;
+	filteredEvents.sort(function(eventA, eventB) {
+		if(eventA.start < eventB.start) return -1;
+		else if (eventA.start > eventA.start) return 1;
 		else return 0;
 	});
 

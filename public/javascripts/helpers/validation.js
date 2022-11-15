@@ -11,20 +11,20 @@ function validateJson(json){
 }
 
 // calculations for event collision
-function gcd(a, b) { // greatest common denominator
-	if(b == undefined) {
-		console.warn(b);
+function gcd(num_a, num_b) { // greatest common denominator
+	if(num_b == undefined) {
+		console.warn(num_b);
 		return Infinity;
 	}
-	while(b!=0) {
-		let c = b;
-		b = a % b;
-		a = c;
+	while(num_b!=0) {
+		let exchanger = num_b;
+		num_b = num_a % num_b;
+		num_a = exchanger;
 	}
-	return a;
+	return num_a;
 }
-function lcm(a, b) { // least common multiple
-    return a * b / gcd(a, b);
+function lcm(num_a, num_b) { // least common multiple
+    return num_a * num_b / gcd(a, num_b);
 }
 
 function time1_is_less(time1, time2) { return true ? time1 < time2 : false }

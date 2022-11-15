@@ -14,14 +14,14 @@ function loginGet(req, res) {
 
 function tokenPost(req, res) {
 	let q = "SELECT user_id, password FROM User WHERE username = ?";
-	con.query(q, [req.body.name], async(err, qres) => {
+	con.query(q, [req.body.name], async(err, query_res) => {
 		if(err) console.log(err);
-		if(qres.length == 0) res.status(400).send({
+		if(query_res.length == 0) res.status(400).send({
 			success: false, error: { message: "User not found!" }
 		});
-		else if(await argon2.verify(qres[0].password, req.body.password)) {
-			delete qres[0].password;
-			let parsedQuery = JSON.parse(JSON.stringify(qres[0]));
+		else if(await argon2.verify(query_res[0].password, req.body.password)) {
+			delete query_res[0].password;
+			let parsedQuery = JSON.parse(JSON.stringify(query_res[0]));
 			let token = jwt.sign(parsedQuery, process.env.JWT_KEY, {
 				algorithm: process.env.JWT_ALG,
 				expiresIn: '24h'
@@ -38,10 +38,10 @@ async function registerPost(req, res) {
 	let q = "INSERT INTO User(username, password) VALUES(?, ?)";
 	console.log("INSERT INTO User(username, password) VALUES(", 
 		req.body.name, ",", hashed_password, ")");
-	con.query(q, [req.body.name, hashed_password], (err, qres) => {
+	con.query(q, [req.body.name, hashed_password], (err, query_res) => {
 		if(err) console.log(err);
 		q = "INSERT INTO Schedule(user_id, schedule_name) VALUES(?, ?)"
-		con.query(q, [qres.insertId, "Default"], (err, qres) => {
+		con.query(q, [query_res.insertId, "Default"], (err, query_res) => {
 			if(err) console.log(err); 
 			console.log("Succesfully registered new user and schedule.");
 			res.json({success: true});
